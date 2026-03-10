@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="SharpVision.Console/SharpVision.Console.csproj" />
+  <Project Path="SharpVision.Core/SharpVision.Core.csproj" />
+  <Project Path="SharpVision.Processing/SharpVision.Processing.csproj" />
+</Solution>
