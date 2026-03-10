@@ -11,8 +11,9 @@ internal class SharpVisionClass
     {
         string imageName = "image2"; // png
 
-        string inputPath = $"/home/cenfra/Pictures/{imageName}.png";
-        string outputPath = $"/home/cenfra/Pictures/{imageName}_saved.png";
+        string inputPath = $"{imageName}.png";
+        string outputPath = $"{imageName}_saved.png";
+        outputPath = Path.Combine(AppContext.BaseDirectory, outputPath);
 
         Matrix<byte> myImage = await ImageIO.LoadGrayscaleAsync(inputPath);
 
