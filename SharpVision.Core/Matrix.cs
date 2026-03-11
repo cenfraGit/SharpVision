@@ -3,6 +3,8 @@
 // 
 // --------------------------------------------------------------------------------
 
+using System.Runtime.CompilerServices;
+
 namespace SharpVision.Core;
 
 public class Matrix<T> where T : unmanaged
@@ -35,11 +37,13 @@ public class Matrix<T> where T : unmanaged
     // methods
     // --------------------------------------------------------------------------------
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T GetPixel(int row, int col, int channel = 0)
     {
         return this.Data[(row * this.Stride) + (col * this.Channels) + channel];
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void SetPixel(int row, int col, int channel, T value)
     {
         this.Data[(row * this.Stride) + (col * this.Channels) + channel] = value;
