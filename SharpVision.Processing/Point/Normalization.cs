@@ -5,17 +5,17 @@ namespace SharpVision.Processing;
 
 public static partial class Point
 {
-    public static void Normalize(this Matrix<byte> image,
+    public static void Normalize(this Matrix<byte> input,
                                  byte lowerNew = 0,
                                  byte upperNew = 255,
                                  double lowerPercentile = 0.0,
                                  double upperPercentile = 1.0)
     {
-        int totalPixels = image.Data.Length;
+        int totalPixels = input.Data.Length;
         int[] histogram = new int[256];
 
         for (int i = 0; i < totalPixels; i++)
-            histogram[image.Data[i]]++;
+            histogram[input.Data[i]]++;
 
         // pixel count thresholds for percentiles
         int lowerThresholdCount = (int)(totalPixels * lowerPercentile);
@@ -45,12 +45,14 @@ public static partial class Point
 
         double scale = (double)(upperNew - lowerNew) / (upperOld - lowerOld);
 
-        // apply transformation
-        for (int i = 0; i < totalPixels; i++)
+        // calculate transformation
+        byte[] lut = new byte[256];
+        for (int i = 0; i < lut.Length; i++)
         {
-            double r = image.Data[i];
-            double s = (r - lowerOld) * scale + lowerNew;
-            image.Data[i] = Utils.ClampToByte(s);
+            double s = (i - lowerOld) * scale + lowerNew;
+            lut[i] = Utils.ClampToByte(s);
         }
+
+        Utils.ApplyLUT(input, lut);
     }
 }

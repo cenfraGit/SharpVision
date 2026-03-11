@@ -7,11 +7,13 @@ public static partial class Point
 {
     public static void Negative(Matrix<byte> input)
     {
-        for (int i = 0; i < input.Data.Length; i++)
+        byte[] lut = new byte[256];
+        for (int i = 0; i < lut.Length; i++)
         {
-            var r = input.Data[i];
-            int s = 255 - 1 - r; // L = 255
-            input.Data[i] = Utils.ClampToByte(s);
+            int s = 256 - 1 - i; // L = 256
+            lut[i] = Utils.ClampToByte(s);
         }
+
+        Utils.ApplyLUT(input, lut);
     }
 }

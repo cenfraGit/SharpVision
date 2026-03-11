@@ -7,11 +7,13 @@ public static partial class Point
 {
     public static void ScaleIntensity(Matrix<byte> input, double alpha, double beta)
     {
-        for (int i = 0; i < input.Data.Length; i++)
+        byte[] lut = new byte[256];
+        for (int i = 0; i < lut.Length; i++)
         {
-            var r = input.Data[i];
-            double s = alpha * r + beta;
-            input.Data[i] = Utils.ClampToByte(s);
+            double s = alpha * i + beta;
+            lut[i] = Utils.ClampToByte(s);
         }
+
+        Utils.ApplyLUT(input, lut);
     }
 }
