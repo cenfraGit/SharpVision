@@ -38,9 +38,9 @@ public class Matrix<T> where T : unmanaged
     // methods
     // --------------------------------------------------------------------------------
 
-    public Matrix<T> CopyStructureEmpty()
+    public Matrix<T> CopyStructureEmpty(int channels)
     {
-        return new Matrix<T>(this.Rows, this.Columns, this.Channels);
+        return new Matrix<T>(this.Rows, this.Columns, channels);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

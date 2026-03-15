@@ -1,11 +1,8 @@
-using System;
-using SharpVision.Core;
+namespace SharpVision;
 
-namespace SharpVision.Processing;
-
-public static partial class Point
+public static partial class Sharp
 {
-    public static void LogTransform(Matrix<byte> input, double c)
+    public static void Log(Matrix<byte> src, Matrix<byte> dst, double c)
     {
         byte[] lut = new byte[256];
         for (int i = 0; i < lut.Length; i++)
@@ -14,6 +11,6 @@ public static partial class Point
             lut[i] = Utils.ClampToByte(s);
         }
 
-        Utils.ApplyLUT(input, lut);
+        Utils.ApplyLUT(src, dst, lut);
     }
 }

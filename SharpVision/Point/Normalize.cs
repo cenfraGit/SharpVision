@@ -1,21 +1,19 @@
-using System;
-using SharpVision.Core;
+namespace SharpVision;
 
-namespace SharpVision.Processing;
-
-public static partial class Point
+public static partial class Sharp
 {
-    public static void Normalize(this Matrix<byte> input,
+    public static void Normalize(Matrix<byte> src,
+                                 Matrix<byte> dst,
                                  byte lowerNew = 0,
                                  byte upperNew = 255,
                                  double lowerPercentile = 0.0,
                                  double upperPercentile = 1.0)
     {
-        int totalPixels = input.Data.Length;
+        int totalPixels = src.Length;
         int[] histogram = new int[256];
 
         for (int i = 0; i < totalPixels; i++)
-            histogram[input.Data[i]]++;
+            histogram[src.Data[i]]++;
 
         // pixel count thresholds for percentiles
         int lowerThresholdCount = (int)(totalPixels * lowerPercentile);
@@ -53,6 +51,6 @@ public static partial class Point
             lut[i] = Utils.ClampToByte(s);
         }
 
-        Utils.ApplyLUT(input, lut);
+        Utils.ApplyLUT(src, dst, lut);
     }
 }

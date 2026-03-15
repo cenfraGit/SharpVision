@@ -1,17 +1,14 @@
-using System;
-using SharpVision.Core;
+namespace SharpVision;
 
-namespace SharpVision.Processing;
-
-public static partial class Point
+public static partial class Sharp
 {
-    public static void HistogramEqualization(Matrix<byte> input)
+    public static void EqualizeHistogram(Matrix<byte> src, Matrix<byte> dst)
     {
-        int totalPixels = input.Data.Length;
+        int totalPixels = src.Length;
         int[] histogram = new int[256];
 
         for (int i = 0; i < totalPixels; i++)
-            histogram[input.Data[i]]++;
+            histogram[src.Data[i]]++;
 
         double scaleFactor = 255.0 / totalPixels;
 
@@ -25,6 +22,6 @@ public static partial class Point
             lut[i] = Utils.ClampToByte(s);
         }
 
-        Utils.ApplyLUT(input, lut);
+        Utils.ApplyLUT(src, dst, lut);
     }
 }
