@@ -10,6 +10,8 @@ public static partial class Sharp
         if (mask.Channels != 1)
             throw new ArgumentException("Mask must be a 1-channel matrix.");
 
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
+
         for (int row = 0; row < src.Rows; row++)
             for (int col = 0; col < src.Columns; col++)
             {

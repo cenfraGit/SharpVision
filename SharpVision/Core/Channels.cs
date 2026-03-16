@@ -11,6 +11,8 @@ public static partial class Sharp
         if (channel < 0 || channel >= src.Channels)
             throw new ArgumentOutOfRangeException(nameof(channel), "Invalid channel.");
 
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, 1);
+
         int totalPixels = dst.Length;
         int step = src.Channels;
 

@@ -9,6 +9,8 @@ public static partial class Sharp
                                  double lowerPercentile = 0.0,
                                  double upperPercentile = 1.0)
     {
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
+
         int totalPixels = src.Length;
         int[] histogram = new int[256];
 

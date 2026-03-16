@@ -7,6 +7,8 @@ public static partial class Sharp
         if (src1.Length != src2.Length)
             throw new ArgumentException("Matrices must have the same dimensions and channels.");
 
+        dst.ReallocateIfNeeded(src1.Rows, src1.Columns, src1.Channels);
+
         for (int row = 0; row < dst.Rows; row++)
             for (int col = 0; col < dst.Columns; col++)
             {

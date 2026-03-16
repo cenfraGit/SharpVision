@@ -4,6 +4,8 @@ public static partial class Sharp
 {
     public static void BitwiseNot(Matrix<byte> src, Matrix<byte> dst)
     {
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
+
         byte[] lut = new byte[256];
         for (int i = 0; i < lut.Length; i++)
         {

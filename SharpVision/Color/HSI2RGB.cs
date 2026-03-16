@@ -4,6 +4,8 @@ public static partial class Sharp
 {
     private static void HSI2RGB(Matrix<byte> src, Matrix<byte> dst)
     {
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, 3);
+
         for (int i = 0; i < src.Length; i += 3)
         {
             // fetch byte values

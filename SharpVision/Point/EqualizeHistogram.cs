@@ -4,6 +4,8 @@ public static partial class Sharp
 {
     public static void EqualizeHistogram(Matrix<byte> src, Matrix<byte> dst)
     {
+        dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
+
         int totalPixels = src.Length;
         int[] histogram = new int[256];
 
