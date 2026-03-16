@@ -6,7 +6,8 @@ namespace SharpVision;
 
 public enum ColorConversion
 {
-    RGBToHSI
+    RGB2HSI,
+    HSI2RGB
 }
 
 // --------------------------------------------------------------------------------
@@ -19,8 +20,11 @@ public static partial class Sharp
     {
         switch (conversionMode)
         {
-            case ColorConversion.RGBToHSI:
-                RGBToHSI(src, dst);
+            case ColorConversion.RGB2HSI:
+                RGB2HSI(src, dst);
+                break;
+            case ColorConversion.HSI2RGB:
+                HSI2RGB(src, dst);
                 break;
         }
     }

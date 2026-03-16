@@ -10,10 +10,14 @@ public class Program
         Matrix<byte> output = image.CopyStructureEmpty(3);
 
         Sharp.PrintHistogram(image);
-        Sharp.ConvertColor(image, output, ColorConversion.RGBToHSI);
+        Sharp.ConvertColor(image, output, ColorConversion.RGB2HSI);
+        Sharp.SaveImage(output, Path.Combine(AppContext.BaseDirectory, "image4_hsi.png"));
+        Sharp.PrintHistogram(output);
+        Sharp.ConvertColor(output, output, ColorConversion.HSI2RGB);
+        Sharp.SaveImage(output, Path.Combine(AppContext.BaseDirectory, "image4_rgb.png"));
         Sharp.PrintHistogram(output);
 
-        Sharp.SaveImage(output, Path.Combine(AppContext.BaseDirectory, "image4_hsi.png"));
+        Sharp.SaveImage(image, Path.Combine(AppContext.BaseDirectory, "image4.png"));
 
         Console.WriteLine("Processing complete.");
     }

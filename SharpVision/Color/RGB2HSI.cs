@@ -2,7 +2,7 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void RGBToHSI(Matrix<byte> src, Matrix<byte> dst)
+    private static void RGB2HSI(Matrix<byte> src, Matrix<byte> dst)
     {
         for (int i = 0; i < src.Length; i += 3)
         {
