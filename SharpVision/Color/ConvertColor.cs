@@ -25,6 +25,9 @@ public static partial class Sharp
             case ColorConversion.RGB2GRAY:
                 RGB2GRAY(src, dst);
                 break;
+            case ColorConversion.GRAY2RGB:
+                GRAY2RGB(src, dst);
+                break;
             case ColorConversion.RGB2HSI:
                 RGB2HSI(src, dst);
                 break;
