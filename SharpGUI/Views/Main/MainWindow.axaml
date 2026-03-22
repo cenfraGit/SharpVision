@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:dock="clr-namespace:Dock.Avalonia.Controls;assembly=Dock.Avalonia"
+        xmlns:vm="clr-namespace:SharpGUI.Views.Main"
+        xmlns:panels="clr-namespace:SharpGUI.Panels"
+        xmlns:AvaloniaEdit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SharpGUI.Views.Main.MainWindow"
+        x:DataType="vm:MainWindowVM"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="SharpGUI">
+        
+    <Window.DataTemplates>
+        <DataTemplate DataType="{x:Type panels:VariableExplorerVM}">
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type panels:ImagePreviewVM}">
+            <Border Background="#252526">
+                <TextBlock Text="Image Preview Render Area"
+                            Foreground="DimGray"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type panels:ScriptEditorVM}">
+            <AvaloniaEdit:TextEditor Name="Editor"
+                                    Background="#1E1E1E"
+                                    Foreground="#D4D4D4"
+                                    ShowLineNumbers="True"
+                                    FontFamily="Cascadia Code, Consolas, Monospace"
+                                    Document="{Binding ScriptDocument, Mode=TwoWay}"/>
+        </DataTemplate>
+    </Window.DataTemplates>
+
+    <DockPanel>
+        <dock:DockControl Layout="{Binding Layout}" />
+    </DockPanel>
+
+</Window>
