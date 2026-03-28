@@ -11,7 +11,7 @@
         x:DataType="vm:MainWindowVM"
         Icon="/Assets/avalonia-logo.ico"
         Title="SharpGUI">
-        
+
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type panels:VariableExplorerVM}">
         </DataTemplate>
@@ -35,8 +35,21 @@
         </DataTemplate>
     </Window.DataTemplates>
 
+    <Window.KeyBindings>
+        <KeyBinding Gesture="F5" Command="{Binding ButtonRunCommand}" />
+    </Window.KeyBindings>
+
     <DockPanel>
-        <dock:DockControl Layout="{Binding Layout}" />
+        <DockPanel DockPanel.Dock="Top">
+            <Button Content="Run"
+                    Width="100"
+                    Margin="5"
+                    Command="{Binding ButtonRunCommand}"
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Center" />
+        </DockPanel>
+
+        <dock:DockControl DockPanel.Dock="Bottom" Layout="{Binding Layout}" />
     </DockPanel>
 
 </Window>
