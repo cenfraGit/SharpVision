@@ -14,6 +14,25 @@
 
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type panels:VariableExplorerVM}">
+            <DataGrid ItemsSource="{Binding Variables}"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      GridLinesVisibility="All"
+                      BorderThickness="1" BorderBrush="Gray">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name"
+                                        Binding="{Binding Name}"
+                                        Width="1*" />
+
+                    <DataGridTextColumn Header="Type"
+                                        Binding="{Binding Type}"
+                                        Width="1*" />
+
+                    <DataGridTextColumn Header="Value"
+                                        Binding="{Binding Value}"
+                                        Width="2*" />
+                </DataGrid.Columns>
+            </DataGrid>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type panels:ImagePreviewVM}">

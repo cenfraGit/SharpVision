@@ -33,13 +33,7 @@ public partial class MainWindowVM : ObservableObject
                 var runner = new SharpScriptRunner(m.Code);
                 runner.Run();
 
-                StringBuilder sb = new();
-                foreach (var variable in runner.Variables)
-                    sb.Append($"{variable.Key}: {variable.Value}\n");
-
-                var result = MessageBoxManager
-                    .GetMessageBoxStandard("Script", $"Variables:\n{sb}", ButtonEnum.Ok);
-                await result.ShowAsync();
+                WeakReferenceMessenger.Default.Send(new MessageExecutionFinished("none", runner.Variables));
             });
         }
 

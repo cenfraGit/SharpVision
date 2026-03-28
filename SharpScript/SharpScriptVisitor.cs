@@ -2,8 +2,8 @@ namespace SharpScript;
 
 public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
 {
-    private readonly Dictionary<string, int> _variables = new();
-    public Dictionary<string, int> Variables => _variables;
+    private readonly Dictionary<string, object?> _variables = new();
+    public Dictionary<string, object?> Variables => _variables;
 
     public override int VisitProgram(SharpScriptParser.ProgramContext context)
     {
@@ -65,7 +65,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
     public override int VisitIdExpr(SharpScriptParser.IdExprContext context)
     {
         string varName = context.ID().GetText();
-        return _variables.GetValueOrDefault(varName, 0);
+        return (int)_variables.GetValueOrDefault(varName, 0);
     }
 
     public override int VisitAddSubExpr(SharpScriptParser.AddSubExprContext context)

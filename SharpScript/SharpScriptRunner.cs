@@ -7,7 +7,7 @@ namespace SharpScript;
 public class SharpScriptRunner
 {
     public string Code { get; set; } = string.Empty;
-    public Dictionary<string, int> Variables { get; set; } = [];
+    public Dictionary<string, object?> Variables { get; set; } = [];
 
     public SharpScriptRunner()
     {
