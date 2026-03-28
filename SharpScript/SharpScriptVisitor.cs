@@ -3,6 +3,7 @@ namespace SharpScript;
 public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
 {
     private readonly Dictionary<string, int> _variables = new();
+    public Dictionary<string, int> Variables => _variables;
 
     public override int VisitProgram(SharpScriptParser.ProgramContext context)
     {
@@ -29,7 +30,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
     {
         string varName = context.assignment().ID().GetText();
         int value = Visit(context.assignment().expr());
-        
+
         if (!_variables.ContainsKey(varName))
             throw new Exception($"Variable {varName} not defined.");
 
@@ -58,7 +59,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
         return value;
     }
 
-    public override int VisitIntExpr(SharpScriptParser.IntExprContext context) 
+    public override int VisitIntExpr(SharpScriptParser.IntExprContext context)
         => int.Parse(context.INT().GetText());
 
     public override int VisitIdExpr(SharpScriptParser.IdExprContext context)
@@ -72,5 +73,12 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<int>
         int left = Visit(context.expr(0));
         int right = Visit(context.expr(1));
         return context.op.Text == "+" ? left + right : left - right;
+    }
+
+    public override int VisitMulDivExpr(SharpScriptParser.MulDivExprContext context)
+    {
+        int left = Visit(context.expr(0));
+        int right = Visit(context.expr(1));
+        return context.op.Text == "*" ? left * right : left / right;
     }
 }
