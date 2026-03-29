@@ -70,6 +70,11 @@ public class Matrix<T> : IDisposable where T : unmanaged
         this.Channels = 0;
     }
 
+    public override string ToString()
+    {
+        return $"({Rows}r x {Columns}c x {Channels}) [{typeof(T).Name}]";
+    }
+
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public T GetPixel(int row, int col, int channel = 0)
     {
