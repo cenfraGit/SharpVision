@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SharpGUI.Models.Editor;
+namespace SharpGUI.Models.Messages;
 
 // used to "request" the active script's code
 public class MessageRunActiveScript { }
@@ -21,5 +21,17 @@ public class MessageExecutionFinished
     {
         this.ScriptName = scriptName;
         this.ScriptVariables = scriptVariables;
+    }
+}
+
+public class MessageVariableSelected
+{
+    public string Name { get; }
+    public object? Value { get; }
+
+    public MessageVariableSelected(string name, object? value)
+    {
+        this.Name = name;
+        this.Value = value;
     }
 }
