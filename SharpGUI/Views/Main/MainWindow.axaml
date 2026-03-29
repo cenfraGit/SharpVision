@@ -64,6 +64,31 @@
     </Window.KeyBindings>
 
     <DockPanel>
+
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" InputGesture="Ctrl+N" />
+                <MenuItem Header="_Open" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+
+            <MenuItem Header="_Script">
+                <MenuItem Header="_Run" Command="{Binding ButtonRunCommand}" InputGesture="F5" />
+                <Separator />
+                <MenuItem Header="_Functions" />
+            </MenuItem>
+
+            <MenuItem Header="_Views">
+                <MenuItem Header="Show Variable Explorer" ToggleType="CheckBox" />
+                <MenuItem Header="Show Image Preview" ToggleType="CheckBox" />
+            </MenuItem>
+
+            <MenuItem Header="_Help">
+                <MenuItem Header="_About" />
+            </MenuItem>
+        </Menu>
+
         <DockPanel DockPanel.Dock="Top">
             <Button Content="Run"
                     Width="100"
