@@ -32,6 +32,7 @@ public partial class VariableExplorerVM : Tool
     public VariableExplorerVM()
     {
         WeakReferenceMessenger.Default.Register<MessageExecutionFinished>(this, (r, m) => {
+            this.Title = $"Variable Explorer ({m.ScriptName})";
             Variables.Clear();
             foreach (var v in m.ScriptVariables)
             {

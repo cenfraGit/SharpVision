@@ -8,8 +8,13 @@ public class MessageRunActiveScript { }
 // used to broadcast the script code
 public class MessageExecuteCode
 {
-    public string Code { get; }
-    public MessageExecuteCode(string code) => Code = code;
+    public string ScriptName { get; }
+    public string ScriptCode { get; }
+    public MessageExecuteCode(string scriptName, string scriptCode)
+    {
+        this.ScriptName = scriptName;
+        this.ScriptCode = scriptCode;
+    }
 }
 
 public class MessageExecutionFinished

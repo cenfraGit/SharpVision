@@ -8,6 +8,7 @@ namespace SharpGUI.Panels;
 
 public partial class ScriptEditorVM : Document
 {
+    public string ScriptName { get; } = string.Empty;
     [ObservableProperty] TextDocument _scriptDocument =
     new TextDocument("int x = 10;\nint y = x + 5;\nif (y - 15) {\n    print 999;\n}\nx = 2;\nint z = x * y;\nprint z;");
 
@@ -18,7 +19,7 @@ public partial class ScriptEditorVM : Document
         WeakReferenceMessenger.Default.Register<MessageRunActiveScript>(this, (r, m) => {
             string scriptCode = ScriptDocument.Text;
             if (this.IsActive)
-                WeakReferenceMessenger.Default.Send(new MessageExecuteCode(scriptCode));
+                WeakReferenceMessenger.Default.Send(new MessageExecuteCode(this.ScriptName, scriptCode));
         });
     }
 }
