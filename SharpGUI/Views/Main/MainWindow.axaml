@@ -15,6 +15,7 @@
     <Window.DataTemplates>
         <DataTemplate DataType="{x:Type panels:VariableExplorerVM}">
             <DataGrid ItemsSource="{Binding Variables}"
+                      SelectedItem="{Binding SelectedVariable}"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       GridLinesVisibility="All"
@@ -29,7 +30,7 @@
                                         Width="1*" />
 
                     <DataGridTextColumn Header="Value"
-                                        Binding="{Binding Value}"
+                                        Binding="{Binding ValueDisplay}"
                                         Width="2*" />
                 </DataGrid.Columns>
             </DataGrid>
@@ -37,10 +38,14 @@
 
         <DataTemplate DataType="{x:Type panels:ImagePreviewVM}">
             <Border Background="#252526">
-                <TextBlock Text="Image Preview Render Area"
-                            Foreground="DimGray"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"/>
+                <DockPanel>
+                    <TextBlock DockPanel.Dock="Top" Text="{Binding ImageTitle}" Margin="5"/>
+                    <Image Source="{Binding DisplayedImage}"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           RenderOptions.BitmapInterpolationMode="HighQuality" />
+                </DockPanel>
             </Border>
         </DataTemplate>
 
