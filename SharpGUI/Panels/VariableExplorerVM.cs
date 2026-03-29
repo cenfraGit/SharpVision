@@ -22,11 +22,18 @@ public partial class VariableExplorerVM : Tool
             Variables.Clear();
             foreach (var v in m.ScriptVariables)
             {
-                Variables.Add(new VariableItem {
-                        Name = v.Key,
-                        Type = v.Value?.GetType().Name ?? "null",
-                        Value = v.Value?.ToString() ?? "null"
-                });
+                string variableName = v.Key;
+                string variableType = v.Value?.GetType().Name ?? "null";
+                string variableValue = v.Value?.ToString() ?? "null";
+
+                // handle when matrix (generic)
+                variableType = variableType.Contains("`")
+                    ? variableType.Substring(0, variableType.IndexOf('`'))
+                    : variableType;
+
+                Variables.Add(new VariableItem { Name = variableName,
+                                                 Type = variableType,
+                                                 Value = variableValue });
             }
         });
     }
