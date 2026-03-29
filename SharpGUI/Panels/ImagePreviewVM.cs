@@ -12,8 +12,6 @@ namespace SharpGUI.Panels;
 
 public partial class ImagePreviewVM : Tool
 {
-    [ObservableProperty] string _imageTitle = "No Image Selected";
-
     private Bitmap? _displayedImage;
     public Bitmap? DisplayedImage
     {
@@ -35,7 +33,7 @@ public partial class ImagePreviewVM : Tool
 
     private void UpdateView(string name, dynamic? matrix)
     {
-        ImageTitle = "No Image Selected";
+        this.Title = "Image Preview";
         DisplayedImage = null;
 
         if (matrix == null) return;
@@ -93,6 +91,6 @@ public partial class ImagePreviewVM : Tool
         }
 
         DisplayedImage = writeableBitmap;
-        ImageTitle = $"Preview: {name}";
+        this.Title = $"Image Preview: {name}";
     }
 }

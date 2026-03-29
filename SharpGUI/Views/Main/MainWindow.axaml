@@ -39,7 +39,6 @@
         <DataTemplate DataType="{x:Type panels:ImagePreviewVM}">
             <Border Background="#252526">
                 <DockPanel>
-                    <TextBlock DockPanel.Dock="Top" Text="{Binding ImageTitle}" Margin="5"/>
                     <Image Source="{Binding DisplayedImage}"
                            Stretch="Uniform"
                            HorizontalAlignment="Stretch"
