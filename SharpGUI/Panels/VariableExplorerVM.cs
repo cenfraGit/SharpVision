@@ -1,7 +1,7 @@
 using Dock.Model.Mvvm.Controls;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
-using SharpGUI.Models.Editor;
+using SharpGUI.Models.Messages;
 
 namespace SharpGUI.Panels;
 
@@ -9,12 +9,25 @@ public class VariableItem
 {
     public string Name { get; set; } = string.Empty;
     public string Type { get; set; } = string.Empty;
-    public string Value { get; set; } = string.Empty;
+    public string ValueDisplay { get; set; } = string.Empty;
+    public object? ValueRaw { get; set; }
 }
 
 public partial class VariableExplorerVM : Tool
 {
     public ObservableCollection<VariableItem> Variables { get; set; } = [];
+
+    private VariableItem? _selectedVariable;
+    public VariableItem? SelectedVariable
+    {
+        get => _selectedVariable;
+        set
+        {
+            if (SetProperty(ref _selectedVariable, value))
+                if (_selectedVariable is not null)
+                    WeakReferenceMessenger.Default.Send(new MessageVariableSelected(_selectedVariable.Name, _selectedVariable.ValueRaw));
+        }
+    }
 
     public VariableExplorerVM()
     {
@@ -33,7 +46,8 @@ public partial class VariableExplorerVM : Tool
 
                 Variables.Add(new VariableItem { Name = variableName,
                                                  Type = variableType,
-                                                 Value = variableValue });
+                                                 ValueDisplay = variableValue,
+                                                 ValueRaw = v.Value });
             }
         });
     }
