@@ -6,6 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+<ItemGroup>
+    <ProjectReference Include="..\SharpVision\SharpVision.csproj" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="SharpScript.g4" />
   </ItemGroup>
