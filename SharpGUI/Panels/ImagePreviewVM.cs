@@ -27,7 +27,11 @@ public partial class ImagePreviewVM : Tool
     {
         WeakReferenceMessenger.Default.Register<MessageVariableSelected>(this, (r, m) =>
         {
-            UpdateView(m.Name, m.Value);
+            try
+            {
+                UpdateView(m.Name, m.Value);
+            }
+            catch { }
         });
     }
 
