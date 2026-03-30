@@ -13,4 +13,12 @@ public static partial class Sharp
         }
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Masking", "Applies a threshold to an image.")]
+    private static object[] Threshold(Matrix<byte> src, byte threshold)
+    {
+        Matrix<byte> dst = new(src.Rows, src.Columns, src.Channels);
+        Threshold(src, dst, threshold);
+        return new object[] { dst };
+    }
 }

@@ -49,4 +49,11 @@ public static partial class Sharp
             return matrix;
         }
     }
+
+    [SharpFunction("Read/Write", "Reads an image from a path.")]
+    private static object[] ReadImage(string src)
+    {
+        Matrix<byte> dst = ReadImage(src, ReadMode.Default);
+        return new object[] { dst };
+    }
 }
