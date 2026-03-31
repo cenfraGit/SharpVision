@@ -8,14 +8,19 @@ namespace SharpGUI.Panels;
 
 public partial class ScriptEditorVM : Document
 {
-    public string ScriptName { get; } = string.Empty;
-    [ObservableProperty] TextDocument _scriptDocument =
-    new TextDocument("int x = 10;\nint y = x + 5;\nif (y - 15) {\n    print 999;\n}\nx = 2;\nint z = x * y;\nprint z;");
+    public string ScriptName { get; set; } = string.Empty;
+    public string? ScriptPath { get; set; } = string.Empty;
+    [ObservableProperty] TextDocument _scriptDocument;
 
-
-    public ScriptEditorVM()
+    public ScriptEditorVM(string name, string? path, string contents)
     {
+        this.Title = name;
+        this.ScriptName = name;
+        this.ScriptPath = path;
+        this.ScriptDocument = new(contents);
+
         // whenever we receive a "run script" message, we'll broadcast back a message with the script data
+        // before sending, save?
         WeakReferenceMessenger.Default.Register<MessageRunActiveScript>(this, (r, m) => {
             string scriptCode = ScriptDocument.Text;
             if (this.IsActive)

@@ -14,11 +14,11 @@ public class DockFactory : Factory
         {
             var variableExplorer = new VariableExplorerVM { Id = "Variables", Title = "Variable Explorer" };
             var imagePreview = new ImagePreviewVM { Id = "Preview", Title = "Image Preview" };
-            var scriptEditor = new ScriptEditorVM { Id = "Editor", Title = "main.svs" };
+            var scriptEditor = new ScriptEditorVM("New", null, "");
 
             var previewToolDock = new ToolDock { ActiveDockable = imagePreview, VisibleDockables = CreateList<IDockable>(imagePreview) };
             var variablesToolDock = new ToolDock { ActiveDockable = variableExplorer, VisibleDockables = CreateList<IDockable>(variableExplorer) };
-            var documentDock = new DocumentDock { ActiveDockable = scriptEditor, VisibleDockables = CreateList<IDockable>(scriptEditor) };
+            var documentDock = new DocumentDock { Id = "Scripts", ActiveDockable = scriptEditor, VisibleDockables = CreateList<IDockable>(scriptEditor) };
 
             previewToolDock.Proportion = 0.5;
             variablesToolDock.Proportion = 0.5;
