@@ -4,11 +4,17 @@ using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
 using SharpGUI.Views.Main;
+using Microsoft.Extensions.DependencyInjection;
+using CommunityToolkit.Mvvm.Messaging;
+using SharpGUI.Services;
+using System;
 
 namespace SharpGUI;
 
 public partial class App : Application
 {
+    public static IServiceProvider? ServiceProvider { get; private set; }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -16,15 +22,21 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        IServiceCollection collection = new ServiceCollection();
+        collection.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
+        collection.AddSingleton<IDialogService, DialogService>();
+        collection.AddTransient<MainWindowVM>();
+
+        ServiceProvider = collection.BuildServiceProvider();
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-            // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowVM(),
-            };
+            var mainWindow = new MainWindow();
+            var dialogService = ServiceProvider.GetRequiredService<IDialogService>();
+            dialogService.Initialize(mainWindow);
+            mainWindow.DataContext = ServiceProvider.GetRequiredService<MainWindowVM>();
+            desktop.MainWindow = mainWindow;
         }
 
         base.OnFrameworkInitializationCompleted();
