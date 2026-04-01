@@ -5,6 +5,7 @@ using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
 using SharpGUI.Panels;
+using SharpGUI.Views.Editor;
 
 namespace SharpGUI.Models.Layout;
 

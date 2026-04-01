@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
 using SharpGUI.Models.Messages;
 
-namespace SharpGUI.Panels;
+namespace SharpGUI.Views.Editor;
 
 public partial class ScriptEditorVM : Document
 {

@@ -11,7 +11,7 @@ using Dock.Model.Controls;
 using Dock.Model.Core;
 using SharpGUI.Models.Layout;
 using SharpGUI.Models.Messages;
-using SharpGUI.Panels;
+using SharpGUI.Views.Editor;
 using SharpGUI.Services;
 using SharpScript;
 using SharpVision;
@@ -127,7 +127,7 @@ public partial class MainWindowVM : ObservableObject
                 activeEditor.ScriptPath = path;
                 activeEditor.Id = path;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // ...?
             }
