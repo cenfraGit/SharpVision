@@ -10,6 +10,7 @@
     </Application.DataTemplates>
 
     <Application.Resources>
+      <FontFamily x:Key="CascadiaCode">avares://SharpGUI/Assets/Fonts#Cascadia Code</FontFamily>
     </Application.Resources>
 
     <Application.Styles>

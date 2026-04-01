@@ -1,0 +1,11 @@
+{
+  "name": "SharpScript",
+  "scopeName": "source.svs",
+  "patterns": [
+    { "name": "keyword.control.svs", "match": "\\b(if|else|while|foreach|in|func|return)\\b" },
+    { "name": "constant.language.svs", "match": "\\b(true|false)\\b" },
+    { "name": "string.quoted.double.svs", "begin": "\"", "end": "\"" },
+    { "name": "constant.numeric.svs", "match": "\\b\\d+(\\.\\d+)?\\b" },
+    { "name": "entity.name.function.svs", "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()" }
+  ]
+}

@@ -14,6 +14,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\sharpscript.tmLanguage.json" />
+    <EmbeddedResource Include="Assets\Themes\dark_plus.json" />
+    <EmbeddedResource Include="Assets\Themes\onedark-color-theme.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Fonts\*" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <Folder Include="Models/Layout/" />
     <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
@@ -31,11 +42,13 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="AvaloniaEdit.TextMate" Version="11.4.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="Dock.Avalonia" Version="11.3.11.22" />
     <PackageReference Include="Dock.Avalonia.Themes.Fluent" Version="11.3.11.22" />
     <PackageReference Include="Dock.Model.Mvvm" Version="11.3.11.22" />
     <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+    <PackageReference Include="TextMateSharp.Grammars" Version="2.0.3" />
   </ItemGroup>
 </Project>
