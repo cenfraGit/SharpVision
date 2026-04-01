@@ -3,13 +3,13 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
-using SharpGUI.Views.Main;
+using SharpIDE.Views.Main;
 using Microsoft.Extensions.DependencyInjection;
 using CommunityToolkit.Mvvm.Messaging;
-using SharpGUI.Services;
+using SharpIDE.Services;
 using System;
 
-namespace SharpGUI;
+namespace SharpIDE;
 
 public partial class App : Application
 {

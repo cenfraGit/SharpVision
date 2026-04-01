@@ -5,7 +5,7 @@ using AvaloniaEdit.Indentation.CSharp;
 using AvaloniaEdit.TextMate;
 using TextMateSharp.Grammars;
 
-namespace SharpGUI.Views.Editor;
+namespace SharpIDE.Views.Editor;
 
 public partial class ScriptEditorView : UserControl
 {
@@ -19,7 +19,7 @@ public partial class ScriptEditorView : UserControl
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-        
+
         var editor = this.FindControl<TextEditor>("Editor");
         if (editor != null && _textMateInstallation == null)
         {
@@ -47,7 +47,7 @@ public partial class ScriptEditorView : UserControl
                 }
             };
         }
-        
+
         // var textEditor = this.FindControl<TextEditor>("Editor");
         // var registryOptions = new RegistryOptions(ThemeName.OneDark);
         // var textMateInstallation = textEditor.InstallTextMate(registryOptions);

@@ -1,6 +1,6 @@
 using Avalonia.Controls;
 
-namespace SharpGUI.Views.Main;
+namespace SharpIDE.Views.Main;
 
 public partial class MainWindow : Window
 {

@@ -1,7 +1,7 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="SharpGUI.App"
-             xmlns:local="using:SharpGUI"
+             x:Class="SharpIDE.App"
+             xmlns:local="using:SharpIDE"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
@@ -10,7 +10,7 @@
     </Application.DataTemplates>
 
     <Application.Resources>
-      <FontFamily x:Key="CascadiaCode">avares://SharpGUI/Assets/Fonts#Cascadia Code</FontFamily>
+      <FontFamily x:Key="CascadiaCode">avares://SharpIDE/Assets/Fonts#Cascadia Code</FontFamily>
     </Application.Resources>
 
     <Application.Styles>

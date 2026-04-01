@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SharpGUI.Models.Messages;
+namespace SharpIDE.Models.Messages;
 
 // used to "request" the active script's code
 public class MessageRunActiveScript { }

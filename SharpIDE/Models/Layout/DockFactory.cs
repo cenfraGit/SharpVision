@@ -4,10 +4,10 @@ using Dock.Model.Controls;
 using Dock.Model.Core;
 using Dock.Model.Mvvm;
 using Dock.Model.Mvvm.Controls;
-using SharpGUI.Panels;
-using SharpGUI.Views.Editor;
+using SharpIDE.Panels;
+using SharpIDE.Views.Editor;
 
-namespace SharpGUI.Models.Layout;
+namespace SharpIDE.Models.Layout;
 
 public class DockFactory : Factory
     {

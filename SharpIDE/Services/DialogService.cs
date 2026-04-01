@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 
-namespace SharpGUI.Services;
+namespace SharpIDE.Services;
 
 public interface IDialogService
 {

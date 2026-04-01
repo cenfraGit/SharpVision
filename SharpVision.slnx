@@ -2,5 +2,5 @@
   <Project Path="Console/Console.csproj" />
   <Project Path="SharpScript/SharpScript.csproj" />
   <Project Path="SharpVision/SharpVision.csproj" />
-  <Project Path="SharpGUI/SharpGUI.csproj" />
+  <Project Path="SharpIDE/SharpIDE.csproj" />
 </Solution>

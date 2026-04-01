@@ -2,9 +2,9 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
-using SharpGUI.Models.Messages;
+using SharpIDE.Models.Messages;
 
-namespace SharpGUI.Views.Editor;
+namespace SharpIDE.Views.Editor;
 
 public partial class ScriptEditorVM : Document
 {
