@@ -7,16 +7,16 @@ using TextMateSharp.Internal.Types;
 using TextMateSharp.Registry;
 using TextMateSharp.Themes;
 
-namespace SharpGUI.Views.Editor;
+namespace SharpIDE.Views.Editor;
 
 public class SharpScriptRegistryOptions : IRegistryOptions
 {
-    private readonly string _grammarResource = "SharpGUI.Assets.sharpscript.tmLanguage.json";
+    private readonly string _grammarResource = "SharpIDE.Assets.sharpscript.tmLanguage.json";
 
     public IRawTheme GetDefaultTheme()
     {
         return ThemeReader.ReadThemeSync(new StreamReader(
-             Assembly.GetExecutingAssembly().GetManifestResourceStream("SharpGUI.Assets.Themes.onedark-color-theme.json")!));
+             Assembly.GetExecutingAssembly().GetManifestResourceStream("SharpIDE.Assets.Themes.onedark-color-theme.json")!));
     }
 
     public IRawGrammar? GetGrammar(string scopeName)
@@ -39,6 +39,6 @@ public class SharpScriptRegistryOptions : IRegistryOptions
     {
         var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
         return ThemeReader.ReadThemeSync(new StreamReader(
-             Assembly.GetExecutingAssembly().GetManifestResourceStream("SharpGUI.Assets.Themes.onedark-color-theme.json")!));
+             Assembly.GetExecutingAssembly().GetManifestResourceStream("SharpIDE.Assets.Themes.onedark-color-theme.json")!));
     }
 }

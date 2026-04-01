@@ -1,9 +1,9 @@
 using Dock.Model.Mvvm.Controls;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
-using SharpGUI.Models.Messages;
+using SharpIDE.Models.Messages;
 
-namespace SharpGUI.Panels;
+namespace SharpIDE.Panels;
 
 public class VariableItem
 {

@@ -2,13 +2,13 @@ using Dock.Model.Mvvm.Controls;
 using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using SharpGUI.Models.Messages;
+using SharpIDE.Models.Messages;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Platform;
 using System;
 
-namespace SharpGUI.Panels;
+namespace SharpIDE.Panels;
 
 public partial class ImagePreviewVM : Tool
 {

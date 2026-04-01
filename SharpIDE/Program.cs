@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace SharpGUI;
+namespace SharpIDE;
 
 sealed class Program
 {

@@ -9,14 +9,14 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Controls;
 using Dock.Model.Core;
-using SharpGUI.Models.Layout;
-using SharpGUI.Models.Messages;
-using SharpGUI.Views.Editor;
-using SharpGUI.Services;
+using SharpIDE.Models.Layout;
+using SharpIDE.Models.Messages;
+using SharpIDE.Views.Editor;
+using SharpIDE.Services;
 using SharpScript;
 using SharpVision;
 
-namespace SharpGUI.Views.Main;
+namespace SharpIDE.Views.Main;
 
 public partial class MainWindowVM : ObservableObject
 {
