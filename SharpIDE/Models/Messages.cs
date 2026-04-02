@@ -1,3 +1,4 @@
+using SharpScript;
 using System.Collections.Generic;
 
 namespace SharpIDE.Models.Messages;
@@ -20,12 +21,12 @@ public class MessageExecuteCode
 public class MessageExecutionFinished
 {
     public string ScriptName { get; }
-    public Dictionary<string, object?> ScriptVariables { get; }
+    public SharpScriptEnvironment Environment { get; }
 
-    public MessageExecutionFinished(string scriptName, Dictionary<string, object?> scriptVariables)
+    public MessageExecutionFinished(string scriptName, SharpScriptEnvironment environment)
     {
         this.ScriptName = scriptName;
-        this.ScriptVariables = scriptVariables;
+        this.Environment = environment;
     }
 }
 
