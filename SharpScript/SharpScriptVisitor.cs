@@ -181,6 +181,27 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     }
 
     // --------------------------------------------------------------------------------
+    // conditionals
+    // --------------------------------------------------------------------------------
+
+    public override object? VisitIfStat(SharpScriptParser.IfStatContext context)
+    {
+        for (int i = 0; i < context.expr().Length; i++)
+        {
+            if (Visit(context.expr(i)) is bool condition && condition)
+            {
+                Visit(context.blockStat(i));
+                return null;
+            }
+        }
+
+        if (context.ELSE() is not null)
+            Visit(context.blockStat(context.blockStat().Length - 1)); // execute last
+
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------
     // loops
     // --------------------------------------------------------------------------------
 
