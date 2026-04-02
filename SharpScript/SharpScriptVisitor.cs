@@ -170,6 +170,30 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     }
 
     // --------------------------------------------------------------------------------
+    // block
+    // --------------------------------------------------------------------------------
+
+    public override object? VisitBlockStat(SharpScriptParser.BlockStatContext context)
+    {
+        foreach (var statement in context.statement())
+            Visit(statement);
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------
+    // loops
+    // --------------------------------------------------------------------------------
+
+    public override object? VisitWhileStat(SharpScriptParser.WhileStatContext context)
+    {
+        while (Visit(context.expr()) is bool condition && condition)
+        {
+            Visit(context.blockStat());
+        }
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------
     // functions
     // --------------------------------------------------------------------------------
 
