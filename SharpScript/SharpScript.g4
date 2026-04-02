@@ -31,17 +31,18 @@ functionDeclarationStat : FUNC ID '(' (ID (COMMA ID)*)? ')' blockStat ; // retur
 returnStat : RETURN (expr (COMMA expr)*)? ;
 
 expr
-    : '(' expr ')'                #ParenthesesExpr
-    | expr (MUL|DIV) expr         #MulDivExpr
-    | expr (PLUS|MINUS) expr      #PlusMinusExpr
-    | expr (EQ|GE|LE|GT|LT) expr  #ComparisonExpr
-    | functionCallStat            #FunctionCallExpr
-    | ID                          #IdExpr
-    | INT                         #IntExpr
-    | FLOAT                       #FloatExpr
-    | STRING                      #StringExpr
-    | TRUE                        #TrueExpr
-    | FALSE                       #FalseExpr
+    : '(' expr ')'                    #ParenthesesExpr
+    | expr (MUL|DIV) expr             #MulDivExpr
+    | expr (PLUS|MINUS) expr          #PlusMinusExpr
+    | expr (EQ|NEQ|GE|LE|GT|LT) expr  #ComparisonExpr
+    | expr (AND|OR|XOR) expr          #BoolOperatorExpr
+    | NOT expr                        #NotExpr
+    | functionCallStat                #FunctionCallExpr
+    | ID                              #IdExpr
+    | INT                             #IntExpr
+    | FLOAT                           #FloatExpr
+    | STRING                          #StringExpr
+    | (TRUE|FALSE)                    #BoolExpr
     ;
 
 // --------------------------------------------------------------------------------
@@ -60,11 +61,17 @@ MINUS : '-' ;
 MUL   : '*' ;
 DIV   : '/';
 
-EQ : '==' ;
-GE : '>=' ;
-LE : '<=' ;
-GT : '>' ;
-LT : '<' ;
+EQ  : '==' ;
+NEQ : '!=' ;
+GE  : '>=' ;
+LE  : '<=' ;
+GT  : '>' ;
+LT  : '<' ;
+
+AND : 'and' ;
+OR  : 'or' ;
+XOR : 'xor' ;
+NOT : 'not' ;
 
 ASSIGN : '=' ;
 

@@ -71,8 +71,76 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     }
 
     // --------------------------------------------------------------------------------
-    // atom
+    // expr
     // --------------------------------------------------------------------------------
+
+    public override object? VisitParenthesesExpr(SharpScriptParser.ParenthesesExprContext context)
+    {
+        return Visit(context.expr());
+    }
+
+    public override object? VisitMulDivExpr(SharpScriptParser.MulDivExprContext context)
+    {
+        dynamic? left = Visit(context.expr(0));
+        dynamic? right = Visit(context.expr(1));
+        return (context.MUL() is not null) ? left * right : left / right;
+    }
+
+    public override object? VisitPlusMinusExpr(SharpScriptParser.PlusMinusExprContext context)
+    {
+        dynamic? left = Visit(context.expr(0));
+        dynamic? right = Visit(context.expr(1));
+        return (context.PLUS() is not null) ? left + right : left - right;
+    }
+
+    public override object? VisitComparisonExpr(SharpScriptParser.ComparisonExprContext context)
+    {
+        dynamic? left = Visit(context.expr(0));
+        dynamic? right = Visit(context.expr(1));
+
+        if (context.EQ() is not null)
+            return left == right;
+        else if (context.NEQ() is not null)
+            return left != right;
+        else if (context.GE() is not null)
+            return left >= right;
+        else if (context.LE() is not null)
+            return left <= right;
+        else if (context.GT() is not null)
+            return left > right;
+        else if (context.LT() is not null)
+            return left < right;
+        else
+            throw new ArgumentException("Comparison symbol not defined.");
+    }
+
+    public override object? VisitBoolOperatorExpr(SharpScriptParser.BoolOperatorExprContext context)
+    {
+        dynamic? left = Visit(context.expr(0));
+        dynamic? right = Visit(context.expr(1));
+        if (left is not bool || right is not bool)
+            throw new ArgumentException("Using bool operator on non-boolean values: " +
+            "{left}, {right}.");
+
+        if (context.AND() is not null)
+            return left && right;
+        else if (context.OR() is not null)
+            return left || right;
+        else if (context.XOR() is not null)
+            return left ^ right;
+        else
+            throw new ArgumentException("Bool operator logic not implemented.");
+    }
+
+    public override object? VisitNotExpr(SharpScriptParser.NotExprContext context)
+    {
+        dynamic? expression = Visit(context.expr());
+        if (expression is bool)
+            return !expression;
+        else
+            throw new ArgumentException($"Applying NOT to a non-boolean expression: " +
+            "expression \"{expression}\" is of type \"{expression.GetType()}\"");
+    }
 
     public override object? VisitIntExpr(SharpScriptParser.IntExprContext context)
     {
@@ -90,28 +158,15 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
         return rawString.Substring(1, rawString.Length - 2);
     }
 
+    public override object? VisitBoolExpr(SharpScriptParser.BoolExprContext context)
+    {
+        return (context.TRUE() is not null) ? true : false;
+    }
+
     public override object? VisitIdExpr(SharpScriptParser.IdExprContext context)
     {
         string id = context.ID().GetText();
         return _variables[id];
-    }
-
-    // --------------------------------------------------------------------------------
-    // arithmetic
-    // --------------------------------------------------------------------------------
-
-    public override object? VisitPlusMinusExpr(SharpScriptParser.PlusMinusExprContext context)
-    {
-        dynamic? left = Visit(context.expr(0));
-        dynamic? right = Visit(context.expr(1));
-        return context.PLUS() != null ? left + right : left - right;
-    }
-
-    public override object? VisitMulDivExpr(SharpScriptParser.MulDivExprContext context)
-    {
-        dynamic? left = Visit(context.expr(0));
-        dynamic? right = Visit(context.expr(1));
-        return context.MUL() != null ? left * right : left / right;
     }
 
     // --------------------------------------------------------------------------------
