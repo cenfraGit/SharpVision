@@ -115,7 +115,7 @@ e = 10.1 != 10.0;";
         string code = @"
 a = 10 > 5;
 b = 5 > 10;
-c = 5 > 5";
+c = 5 > 5;";
         var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(false, variables["b"]);
