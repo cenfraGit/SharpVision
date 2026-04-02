@@ -2,6 +2,15 @@
   "name": "SharpScript",
   "scopeName": "source.svs",
   "patterns": [
+    {
+      "name": "comment.block.svs",
+      "begin": "/\\*",
+      "end": "\\*/"
+    },
+    {
+      "name": "comment.line.double-slash.svs",
+      "match": "//.*$"
+    },
     { "name": "keyword.control.svs", "match": "\\b(if|else|while|foreach|in|func|return|and|or|xor|not)\\b" },
     { "name": "constant.language.svs", "match": "\\b(true|false)\\b" },
     { "name": "string.quoted.double.svs", "begin": "\"", "end": "\"" },
