@@ -209,4 +209,36 @@ b = not a;";
         var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["b"]);
     }
+
+    [Fact]
+    public void Test_LineComment()
+    {
+        string code = @"
+// this is a comment
+a = true; // this is another comment
+// different comment
+b = not a;
+// another comment too";
+        var variables = Utils.RunEnv(code);
+        Assert.Equal(false, variables["b"]);
+    }
+
+    [Fact]
+    public void Test_BlockComment()
+    {
+        string code = @"
+// this is a comment
+a = true; /* this is another comment */
+/*
+this is a different comment */ b = not a; /*
+plus another
+*/
+/**/ c = 5;
+/* c = 10;
+*/
+// another comment too";
+        var variables = Utils.RunEnv(code);
+        Assert.Equal(false, variables["b"]);
+        Assert.Equal(5, variables["c"]);
+    }
 }

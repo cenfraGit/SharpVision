@@ -87,5 +87,8 @@ IN      : 'in';
 FUNC    : 'func' ;
 RETURN  : 'return' ;
 
+LINE_COMMENT : '//' ~[\r\n]* -> skip ;
+BLOCK_COMMENT : '/*' .*? '*/' -> skip ;
+
 WS     : [ \t\r\n]+ -> skip;
 ID     : [a-zA-Z_][a-zA-Z0-9_]*;
