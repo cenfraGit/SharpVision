@@ -21,7 +21,7 @@ blockStat : '{' statement* '}' ;
 
 assignmentStat : ID (COMMA ID)* ASSIGN expr ;
 
-ifStat : IF '(' expr ')' blockStat (ELSE IF '(' expr ')' blockStat)* (ELSE blockStat)? ;
+ifStat : IF '(' expr ')' blockStat (ELSEIF '(' expr ')' blockStat)* (ELSE blockStat)? ;
 
 whileStat : WHILE '(' expr ')' blockStat ;
 foreachStat : FOREACH '(' ID IN expr ')' blockStat ;
@@ -78,7 +78,9 @@ ASSIGN : '=' ;
 TRUE    : 'true' ;
 FALSE   : 'false' ;
 IF      : 'if' ;
+ELSEIF  : 'else if' ;
 ELSE    : 'else' ;
+
 WHILE   : 'while' ;
 FOREACH : 'foreach' ;
 IN      : 'in';
