@@ -4,19 +4,11 @@ namespace SharpScript.Tests;
 
 public class TestsExpr
 {
-    // helper for getting environment variables
-    internal Dictionary<string, object?> RunEnv(string code)
-    {
-        var env = new SharpScriptEnvironment(code);
-        env.Run();
-        return env.Variables;
-    }
-
     [Fact]
     public void Test_StoreInteger()
     {
         string code = "x = 10;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.Equal(10, variables["x"]);
     }
@@ -25,7 +17,7 @@ public class TestsExpr
     public void Test_StoreFloat()
     {
         string code = "x = 8.14; y = 10.0;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.True(variables.ContainsKey("y"));
         Assert.Equal((float)8.14, variables["x"]);
@@ -36,7 +28,7 @@ public class TestsExpr
     public void Test_StoreString()
     {
         string code = "x = \"hello\";";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.Equal("hello", variables["x"]);
     }
@@ -45,7 +37,7 @@ public class TestsExpr
     public void Test_StoreBool()
     {
         string code = "x = true; y = false;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.True(variables.ContainsKey("y"));
         Assert.Equal(true, variables["x"]);
@@ -56,7 +48,7 @@ public class TestsExpr
     public void Test_StoreId()
     {
         string code = "x = 1; y = x;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.True(variables.ContainsKey("y"));
         Assert.Equal(1, variables["y"]);
@@ -66,7 +58,7 @@ public class TestsExpr
     public void Test_StoreIdByValue()
     {
         string code = "x = 1; y = x; x = 2;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.True(variables.ContainsKey("y"));
         Assert.Equal(1, variables["y"]);
@@ -76,7 +68,7 @@ public class TestsExpr
     public void Test_StoreParenthesesExpr()
     {
         string code = "x = (1); y = (x + 2);";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.True(variables.ContainsKey("x"));
         Assert.True(variables.ContainsKey("y"));
         Assert.Equal(1, variables["x"]);
@@ -92,7 +84,7 @@ b = 10 == 5;
 c = true == true;
 d = 10.1 == 10.1;
 e = 10.1 == 10.0;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(false, variables["b"]);
         Assert.Equal(true, variables["c"]);
@@ -109,7 +101,7 @@ b = 10 != 5;
 c = true != true;
 d = 10.1 != 10.1;
 e = 10.1 != 10.0;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["a"]);
         Assert.Equal(true, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -124,7 +116,7 @@ e = 10.1 != 10.0;";
 a = 10 > 5;
 b = 5 > 10;
 c = 5 > 5";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(false, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -137,7 +129,7 @@ c = 5 > 5";
 a = 10 >= 5;
 b = 5 >= 10;
 c = 5 >= 5;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(false, variables["b"]);
         Assert.Equal(true, variables["c"]);
@@ -150,7 +142,7 @@ c = 5 >= 5;";
 a = 10 < 5;
 b = 5 < 10;
 c = 5 < 5;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["a"]);
         Assert.Equal(true, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -163,7 +155,7 @@ c = 5 < 5;";
 a = 10 <= 5;
 b = 5 <= 10;
 c = 5 <= 5;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["a"]);
         Assert.Equal(true, variables["b"]);
         Assert.Equal(true, variables["c"]);
@@ -176,7 +168,7 @@ c = 5 <= 5;";
 a = true and true;
 b = true and false;
 c = false and false;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(false, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -189,7 +181,7 @@ c = false and false;";
 a = true or true;
 b = true or false;
 c = false or false;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(true, variables["a"]);
         Assert.Equal(true, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -202,7 +194,7 @@ c = false or false;";
 a = true xor true;
 b = true xor false;
 c = false xor false;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["a"]);
         Assert.Equal(true, variables["b"]);
         Assert.Equal(false, variables["c"]);
@@ -214,7 +206,7 @@ c = false xor false;";
         string code = @"
 a = true;
 b = not a;";
-        var variables = RunEnv(code);
+        var variables = Utils.RunEnv(code);
         Assert.Equal(false, variables["b"]);
     }
 }
