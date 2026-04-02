@@ -34,7 +34,7 @@ public partial class VariableExplorerVM : Tool
         WeakReferenceMessenger.Default.Register<MessageExecutionFinished>(this, (r, m) => {
             this.Title = $"Variable Explorer ({m.ScriptName})";
             Variables.Clear();
-            foreach (var v in m.ScriptVariables)
+            foreach (var v in m.Environment.Variables)
             {
                 string variableName = v.Key;
                 string variableType = v.Value?.GetType().Name ?? "null";

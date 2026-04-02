@@ -40,7 +40,7 @@ public partial class MainWindowVM : ObservableObject
 
             var environment = new SharpScriptEnvironment(m.ScriptCode);
             environment.Run();
-            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment.Variables)); // send environment ref instead?
+            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
         });
 
         LoadFunctionsMenu();
