@@ -23,8 +23,11 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         IServiceCollection collection = new ServiceCollection();
+
         collection.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
         collection.AddSingleton<IDialogService, DialogService>();
+        collection.AddTransient<IErrorService, ErrorService>();
+
         collection.AddTransient<MainWindowVM>();
 
         ServiceProvider = collection.BuildServiceProvider();

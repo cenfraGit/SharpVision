@@ -102,7 +102,84 @@
                     HorizontalContentAlignment="Center" />
         </DockPanel>
 
-        <dock:DockControl DockPanel.Dock="Bottom" Layout="{Binding Layout}" />
+        <DockPanel DockPanel.Dock="Bottom" LastChildFill="False">
+
+            <TextBlock DockPanel.Dock="Left"
+                       Text="SharpIDE v0.1"
+                       VerticalAlignment="Center"
+                       Margin="3" />
+
+            <Button Name="ErrorButton"
+                    DockPanel.Dock="Right"
+                    Width="120"
+                    Margin="3"
+                    HorizontalContentAlignment="Center">
+                <Button.Flyout>
+                    <Flyout Placement="Top">
+                        <DockPanel MinWidth="350" MaxWidth="350" MinHeight="500" MaxHeight="500">
+
+                            <TextBlock DockPanel.Dock="Top" Text="Current errors" />
+
+                            <ListBox DockPanel.Dock="Top" ItemsSource="{Binding ErrorService.Errors}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="5,5,5,0">
+                                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+
+                                                <TextBlock DockPanel.Dock="Top"
+                                                           Foreground="Orange"
+                                                           Text="Error in line "
+                                                           VerticalAlignment="Center"/>
+
+                                                <TextBlock DockPanel.Dock="Top"
+                                                           Foreground="Orange"
+                                                       Text="{Binding Line}"
+                                                       FontWeight="Bold"
+                                                       VerticalAlignment="Center"/>
+
+                                                <TextBlock DockPanel.Dock="Top"
+                                                           Foreground="Orange"
+                                                           Text=", column "
+                                                           VerticalAlignment="Center"/>
+
+                                                <TextBlock DockPanel.Dock="Top"
+                                                           Foreground="Orange"
+                                                           Text="{Binding Column}"
+                                                           FontWeight="Bold"
+                                                           VerticalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <TextBlock DockPanel.Dock="Top"
+                                                       Text="{Binding ExMessage}"
+                                                       TextWrapping="Wrap"/>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </Flyout>
+                </Button.Flyout>
+
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <TextBlock Text="Errors"/>
+                    <Border Background="Red"
+                            CornerRadius="10"
+                            Padding="5,0"
+                            IsVisible="{Binding ErrorService.Errors.Count}">
+                        <TextBlock Text="{Binding ErrorService.Errors.Count}"
+                                   FontSize="10"
+                                   Foreground="White"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="Bold"/>
+                    </Border>
+                </StackPanel>
+            </Button>
+
+        </DockPanel>
+
+        <dock:DockControl DockPanel.Dock="Top" Layout="{Binding Layout}" />
+
     </DockPanel>
 
 </Window>

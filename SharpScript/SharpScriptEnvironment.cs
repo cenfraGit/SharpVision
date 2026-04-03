@@ -14,6 +14,7 @@ public class SharpScriptEnvironment
     public string Code { get; set; } = string.Empty;
 
     private SharpScriptVisitor _visitor;
+    public SharpScriptErrorListener ErrorListener { get; } = new();
 
     public Dictionary<string, object?> Variables { get; set; } = [];
     // for sharp methods
@@ -67,6 +68,11 @@ public class SharpScriptEnvironment
         var tokenStream = new CommonTokenStream(lexer);
 
         var parser = new SharpScriptParser(tokenStream);
+        parser.RemoveErrorListeners();
+
+        this.ErrorListener.Errors.Clear();
+        parser.AddErrorListener(this.ErrorListener);
+
         var tree = parser.program();
 
         this._visitor.Visit(tree);
