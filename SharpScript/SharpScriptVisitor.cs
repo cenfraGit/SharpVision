@@ -1,9 +1,16 @@
 using System.Reflection;
+using Antlr4.Runtime;
 
 namespace SharpScript;
 
 public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
 {
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
+
+    private Script _script;
+    private HashSet<string> _loadedFiles = new (StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, object?> _variables;
     private readonly Dictionary<string, MethodInfo> _registryNative;
     private readonly Dictionary<string, SharpScriptParser.FunctionDeclarationStatContext> _registryUser;
@@ -12,20 +19,64 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     // constructor
     // --------------------------------------------------------------------------------
 
-    public SharpScriptVisitor(Dictionary<string, object?> variables,
+    public SharpScriptVisitor(Script script,
+                              Dictionary<string, object?> variables,
                               Dictionary<string, MethodInfo> registryNative,
                               Dictionary<string, SharpScriptParser.FunctionDeclarationStatContext> registryUser)
     {
-        // use environment tables
-        _variables = variables;
-        _registryNative = registryNative;
-        _registryUser = registryUser;
+        // use data from environment
+        this._script = script;
+        this._variables = variables;
+        this._registryNative = registryNative;
+        this._registryUser = registryUser;
+
+        if (this._script.Path is not null)
+            this._loadedFiles.Add(this._script.Path);
     }
 
     public override object? VisitProgram(SharpScriptParser.ProgramContext context)
     {
+        foreach (var import in context.importStat())
+            Visit(import);
         foreach (var statement in context.statement())
             Visit(statement);
+        return null;
+    }
+
+    // --------------------------------------------------------------------------------
+    // imports
+    // --------------------------------------------------------------------------------
+
+    public override object? VisitImportStat(SharpScriptParser.ImportStatContext context)
+    {
+        string pathImport = context.STRING().GetText().Trim('"');
+
+        // user may input absolute path or relative?
+        // first check if path exists (absolute)
+        string pathFile;
+        if (File.Exists(pathImport))
+        {
+            pathFile = pathImport;
+        }
+        else
+        {
+            // try to use our local parent directory, and relative?
+            pathFile = Path.Join(this._script.Directory, pathImport);
+            if (!File.Exists(pathFile))
+                throw new SharpScriptException($"File not found: {pathFile}", context);
+        }
+
+        if (_loadedFiles.Add(pathFile))
+        {
+            string code = File.ReadAllText(pathFile);
+
+            var inputStream = new AntlrInputStream(code);
+            var lexer = new SharpScriptLexer(inputStream);
+            var tokens = new CommonTokenStream(lexer);
+            var parser = new SharpScriptParser(tokens);
+            var tree = parser.program();
+            this.Visit(tree);
+        }
         return null;
     }
 
