@@ -20,7 +20,7 @@ using MsBox.Avalonia.Enums;
 
 namespace SharpIDE.Views.Main;
 
-public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecuteCode>
+public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
 {
     // --------------------------------------------------------------------------------
     // fields and properties
@@ -57,13 +57,13 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecuteC
     // methods
     // --------------------------------------------------------------------------------
 
-    public async void Receive(MessageExecuteCode m)
+    public async void Receive(MessageExecute m)
     {
         // whenever we receive the requested script code, execute it
 
         this.ErrorService.ClearErrors();
 
-        var environment = new SharpScriptEnvironment(m.ScriptCode);
+        var environment = new SharpScriptEnvironment(m.Script);
         bool isError = false;
 
         try
@@ -85,7 +85,7 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecuteC
         }
 
         if (!isError)
-            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
+            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.Script.Name, environment));
     }
 
     private static IDocumentDock? GetScriptsDock(IDockable? root)
