@@ -4,7 +4,9 @@ grammar SharpScript;
 // parser rules
 // --------------------------------------------------------------------------------
 
-program : statement* EOF ;
+program : importStat* statement* EOF ;
+
+importStat : IMPORT STRING SEMI ;
 
 statement
     : assignmentStat SEMI
@@ -86,6 +88,8 @@ FOREACH : 'foreach' ;
 IN      : 'in';
 FUNC    : 'func' ;
 RETURN  : 'return' ;
+
+IMPORT  : 'import' ;
 
 LINE_COMMENT : '//' ~[\r\n]* -> skip ;
 BLOCK_COMMENT : '/*' .*? '*/' -> skip ;
