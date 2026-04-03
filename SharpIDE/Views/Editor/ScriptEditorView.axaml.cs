@@ -30,30 +30,6 @@ public partial class ScriptEditorView : UserControl
             editor.Options.ConvertTabsToSpaces = true;
             editor.Options.IndentationSize = 4;
             editor.TextArea.IndentationStrategy = new CSharpIndentationStrategy(editor.Options);
-
-            editor.TextArea.TextEntering += (s, e) =>
-            {
-                if (e.Text == "{")
-                {
-                    editor.TextArea.Selection.ReplaceSelectionWithText("{}");
-                    editor.CaretOffset--;
-                    e.Handled = true;
-                }
-                else if (e.Text == "\"")
-                {
-                    editor.TextArea.Selection.ReplaceSelectionWithText("\"\"");
-                    editor.CaretOffset--;
-                    e.Handled = true;
-                }
-            };
         }
-
-        // var textEditor = this.FindControl<TextEditor>("Editor");
-        // var registryOptions = new RegistryOptions(ThemeName.OneDark);
-        // var textMateInstallation = textEditor.InstallTextMate(registryOptions);
-        // textMateInstallation.SetGrammar(
-        //     registryOptions.GetScopeByLanguageId(
-        //         registryOptions.GetLanguageByExtension(".cs").Id));
-
     }
 }
