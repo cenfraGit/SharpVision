@@ -15,20 +15,25 @@ using SharpIDE.Views.Editor;
 using SharpIDE.Services;
 using SharpScript;
 using SharpVision;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace SharpIDE.Views.Main;
 
 public partial class MainWindowVM : ObservableObject
 {
     IDialogService _dialogService;
-    private static int _newFileCounter = 1; 
+    public IErrorService ErrorService { get; set; }
+
+    private static int _newFileCounter = 1;
     public ObservableCollection<MenuItemViewModel> FunctionMenuItems { get; } = new();
     [ObservableProperty] IFactory? _factory;
     [ObservableProperty] IRootDock? _layout;
 
-    public MainWindowVM(IDialogService dialogService)
+    public MainWindowVM(IDialogService dialogService, IErrorService errorService)
     {
         this._dialogService = dialogService;
+        this.ErrorService = errorService;
 
         Factory = new DockFactory();
         Layout = Factory?.CreateLayout();
@@ -38,9 +43,31 @@ public partial class MainWindowVM : ObservableObject
         // whenever we receive the requested script code, execute it
         WeakReferenceMessenger.Default.Register<MessageExecuteCode>(this, async (r, m) => {
 
+            this.ErrorService.ClearErrors();
+
             var environment = new SharpScriptEnvironment(m.ScriptCode);
-            environment.Run();
-            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
+            bool isError = false;
+
+            try
+            {
+                environment.Run();
+            }
+            catch (SharpScriptException sharpException)
+            {
+                this.ErrorService.AddError(sharpException);
+                isError = true;
+            }
+            finally
+            {
+                foreach(var error in environment.ErrorListener.Errors)
+                {
+                    this.ErrorService.AddError(error);
+                    isError = true; // care if reassign?
+                }
+            }
+
+            if (!isError)
+                WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
         });
 
         LoadFunctionsMenu();
@@ -77,9 +104,6 @@ public partial class MainWindowVM : ObservableObject
             var fileName = files[0].Name;
 
             var scriptEditor = new ScriptEditorVM(fileName, path, await File.ReadAllTextAsync(path));
-
-            // var proportionalRoot = Layout?.VisibleDockables?.FirstOrDefault() as IDock;
-            // var documentDock = proportionalRoot?.VisibleDockables?.FirstOrDefault(d => d.Id == "Scripts") as IDocumentDock;
             var documentDock = GetScriptsDock(Layout);
 
             if (documentDock != null)
