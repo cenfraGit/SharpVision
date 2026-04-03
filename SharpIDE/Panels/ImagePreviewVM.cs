@@ -10,8 +10,12 @@ using System;
 
 namespace SharpIDE.Panels;
 
-public partial class ImagePreviewVM : Tool
+public partial class ImagePreviewVM : Tool, IRecipient<MessageVariableSelected>
 {
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
+
     private Bitmap? _displayedImage;
     public Bitmap? DisplayedImage
     {
@@ -23,16 +27,26 @@ public partial class ImagePreviewVM : Tool
         }
     }
 
+    // --------------------------------------------------------------------------------
+    // constructor
+    // --------------------------------------------------------------------------------
+
     public ImagePreviewVM()
     {
-        WeakReferenceMessenger.Default.Register<MessageVariableSelected>(this, (r, m) =>
+        WeakReferenceMessenger.Default.Register(this);
+    }
+
+    // --------------------------------------------------------------------------------
+    // methods
+    // --------------------------------------------------------------------------------
+
+    public async void Receive(MessageVariableSelected m)
+    {
+        try
         {
-            try
-            {
-                UpdateView(m.Name, m.Value);
-            }
-            catch { }
-        });
+            UpdateView(m.Name, m.Value);
+        }
+        catch { } // not image variable
     }
 
     private void UpdateView(string name, dynamic? matrix)

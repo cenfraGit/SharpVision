@@ -20,8 +20,12 @@ using MsBox.Avalonia.Enums;
 
 namespace SharpIDE.Views.Main;
 
-public partial class MainWindowVM : ObservableObject
+public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecuteCode>
 {
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
+
     IDialogService _dialogService;
     public IErrorService ErrorService { get; set; }
 
@@ -29,6 +33,10 @@ public partial class MainWindowVM : ObservableObject
     public ObservableCollection<MenuItemViewModel> FunctionMenuItems { get; } = new();
     [ObservableProperty] IFactory? _factory;
     [ObservableProperty] IRootDock? _layout;
+
+    // --------------------------------------------------------------------------------
+    // construtor
+    // --------------------------------------------------------------------------------
 
     public MainWindowVM(IDialogService dialogService, IErrorService errorService)
     {
@@ -40,38 +48,93 @@ public partial class MainWindowVM : ObservableObject
         if (Layout != null)
             Factory?.InitLayout(Layout);
 
-        // whenever we receive the requested script code, execute it
-        WeakReferenceMessenger.Default.Register<MessageExecuteCode>(this, async (r, m) => {
-
-            this.ErrorService.ClearErrors();
-
-            var environment = new SharpScriptEnvironment(m.ScriptCode);
-            bool isError = false;
-
-            try
-            {
-                environment.Run();
-            }
-            catch (SharpScriptException sharpException)
-            {
-                this.ErrorService.AddError(sharpException);
-                isError = true;
-            }
-            finally
-            {
-                foreach(var error in environment.ErrorListener.Errors)
-                {
-                    this.ErrorService.AddError(error);
-                    isError = true; // care if reassign?
-                }
-            }
-
-            if (!isError)
-                WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
-        });
+        WeakReferenceMessenger.Default.Register(this);
 
         LoadFunctionsMenu();
     }
+
+    // --------------------------------------------------------------------------------
+    // methods
+    // --------------------------------------------------------------------------------
+
+    public async void Receive(MessageExecuteCode m)
+    {
+        // whenever we receive the requested script code, execute it
+
+        this.ErrorService.ClearErrors();
+
+        var environment = new SharpScriptEnvironment(m.ScriptCode);
+        bool isError = false;
+
+        try
+        {
+            environment.Run();
+        }
+        catch (SharpScriptException sharpException)
+        {
+            this.ErrorService.AddError(sharpException);
+            isError = true;
+        }
+        finally
+        {
+            foreach(var error in environment.ErrorListener.Errors)
+            {
+                this.ErrorService.AddError(error);
+                isError = true; // care if reassign?
+            }
+        }
+
+        if (!isError)
+            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.ScriptName, environment));
+    }
+
+    private static IDocumentDock? GetScriptsDock(IDockable? root)
+    {
+        if (root == null) return null;
+        if (root.Id == "Scripts" && root is IDocumentDock docDock) return docDock;
+
+        if (root is IDock dock && dock.VisibleDockables != null)
+        {
+            foreach (var child in dock.VisibleDockables)
+            {
+                var found = GetScriptsDock(child);
+                if (found != null) return found;
+            }
+        }
+        return null;
+    }
+
+    private void LoadFunctionsMenu()
+    {
+        var methods = typeof(Sharp).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
+
+        var discoveredFunctions = methods
+            .Select(m => new { Method = m, Attr = m.GetCustomAttribute<SharpFunctionAttribute>() })
+            .Where(x => x.Attr != null)
+            .ToList();
+
+        var groupedFunctions = discoveredFunctions.GroupBy(x => x.Attr!.Group);
+
+        foreach (var group in groupedFunctions)
+        {
+            var groupMenuItem = new MenuItemViewModel { Header = group.Key };
+
+            foreach (var func in group)
+            {
+                var functionMenuItem = new MenuItemViewModel
+                {
+                    Header = func.Method.Name
+                };
+
+                groupMenuItem.Items.Add(functionMenuItem);
+            }
+            FunctionMenuItems.Add(groupMenuItem);
+        }
+    }
+
+    // --------------------------------------------------------------------------------
+    // commands
+    // --------------------------------------------------------------------------------
 
     [RelayCommand]
     private async Task OnButtonRun()
@@ -155,50 +218,6 @@ public partial class MainWindowVM : ObservableObject
             {
                 // ...?
             }
-        }
-    }
-
-    private static IDocumentDock? GetScriptsDock(IDockable? root)
-    {
-        if (root == null) return null;
-        if (root.Id == "Scripts" && root is IDocumentDock docDock) return docDock;
-
-        if (root is IDock dock && dock.VisibleDockables != null)
-        {
-            foreach (var child in dock.VisibleDockables)
-            {
-                var found = GetScriptsDock(child);
-                if (found != null) return found;
-            }
-        }
-        return null;
-    }
-
-    private void LoadFunctionsMenu()
-    {
-        var methods = typeof(Sharp).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
-
-        var discoveredFunctions = methods
-            .Select(m => new { Method = m, Attr = m.GetCustomAttribute<SharpFunctionAttribute>() })
-            .Where(x => x.Attr != null)
-            .ToList();
-
-        var groupedFunctions = discoveredFunctions.GroupBy(x => x.Attr!.Group);
-
-        foreach (var group in groupedFunctions)
-        {
-            var groupMenuItem = new MenuItemViewModel { Header = group.Key };
-
-            foreach (var func in group)
-            {
-                var functionMenuItem = new MenuItemViewModel
-                {
-                    Header = func.Method.Name
-                };
-
-                groupMenuItem.Items.Add(functionMenuItem);
-            }
-            FunctionMenuItems.Add(groupMenuItem);
         }
     }
 }

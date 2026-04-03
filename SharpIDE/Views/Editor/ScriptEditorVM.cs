@@ -6,11 +6,19 @@ using SharpIDE.Models.Messages;
 
 namespace SharpIDE.Views.Editor;
 
-public partial class ScriptEditorVM : Document
+public partial class ScriptEditorVM : Document, IRecipient<MessageRunActiveScript>
 {
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
+
     public string ScriptName { get; set; } = string.Empty;
     public string? ScriptPath { get; set; } = string.Empty;
     [ObservableProperty] TextDocument _scriptDocument;
+
+    // --------------------------------------------------------------------------------
+    // constructor
+    // --------------------------------------------------------------------------------
 
     public ScriptEditorVM(string name, string? path, string contents)
     {
@@ -19,12 +27,18 @@ public partial class ScriptEditorVM : Document
         this.ScriptPath = path;
         this.ScriptDocument = new(contents);
 
+        WeakReferenceMessenger.Default.Register(this);
+    }
+
+    // --------------------------------------------------------------------------------
+    // methods
+    // --------------------------------------------------------------------------------
+
+    public async void Receive(MessageRunActiveScript m)
+    {
         // whenever we receive a "run script" message, we'll broadcast back a message with the script data
-        // before sending, save?
-        WeakReferenceMessenger.Default.Register<MessageRunActiveScript>(this, (r, m) => {
-            string scriptCode = ScriptDocument.Text;
-            if (this.IsActive)
-                WeakReferenceMessenger.Default.Send(new MessageExecuteCode(this.ScriptName, scriptCode));
-        });
+        string scriptCode = ScriptDocument.Text;
+        if (this.IsActive)
+            WeakReferenceMessenger.Default.Send(new MessageExecuteCode(this.ScriptName, scriptCode));
     }
 }
