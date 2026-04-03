@@ -115,7 +115,7 @@
                     Margin="3"
                     HorizontalContentAlignment="Center">
                 <Button.Flyout>
-                    <Flyout Placement="Top" IsOpen="{Binding IsErrorPopupOpen, Mode=TwoWay}">
+                    <Flyout Placement="Top">
                         <DockPanel MinWidth="350" MaxWidth="350" MinHeight="500" MaxHeight="500">
 
                             <TextBlock DockPanel.Dock="Top" Text="Current errors" />
