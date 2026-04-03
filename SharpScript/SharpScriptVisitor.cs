@@ -43,7 +43,8 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
             if (rightSideValue is object[] resultsArray)
             {
                 if (variableNames.Length != resultsArray.Length)
-                    throw new Exception($"Cannot unpack {resultsArray.Length} values into {variableNames.Length} variables.");
+                    throw new SharpScriptException(
+                        $"Cannot unpack {resultsArray.Length} values into {variableNames.Length} variables.", context);
 
                 for (int i = 0; i < variableNames.Length; i++)
                 {
@@ -52,7 +53,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
             }
             else
             {
-                throw new Exception("Right side of assignment does not return multiple values.");
+                throw new SharpScriptException("Right side of assignment does not return multiple values.", context);
             }
         }
         else
@@ -81,16 +82,36 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
 
     public override object? VisitMulDivExpr(SharpScriptParser.MulDivExprContext context)
     {
-        dynamic? left = Visit(context.expr(0));
-        dynamic? right = Visit(context.expr(1));
-        return (context.MUL() is not null) ? left * right : left / right;
+        dynamic left = Visit(context.expr(0))!;
+        dynamic right = Visit(context.expr(1))!;
+
+        if (context.MUL() is not null)
+        {
+            try { return left * right; }
+            catch { throw new SharpScriptException($"Can't multiply {left.GetType()} with {right.GetType()}", context); }
+        }
+        else
+        {
+            try { return left / right; }
+            catch { throw new SharpScriptException($"Can't divide {left.GetType()} by {right.GetType()}", context); }
+        }
     }
 
     public override object? VisitPlusMinusExpr(SharpScriptParser.PlusMinusExprContext context)
     {
-        dynamic? left = Visit(context.expr(0));
-        dynamic? right = Visit(context.expr(1));
-        return (context.PLUS() is not null) ? left + right : left - right;
+        dynamic left = Visit(context.expr(0))!;
+        dynamic right = Visit(context.expr(1))!;
+
+        if (context.PLUS() is not null)
+        {
+            try { return left + right; }
+            catch { throw new SharpScriptException($"Can't add {left.GetType()} with {right.GetType()}", context); }
+        }
+        else
+        {
+            try { return left - right; }
+            catch { throw new SharpScriptException($"Can't subtract {right.GetType()} from {left.GetType()}", context); }
+        }
     }
 
     public override object? VisitComparisonExpr(SharpScriptParser.ComparisonExprContext context)
@@ -98,20 +119,29 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
         dynamic? left = Visit(context.expr(0));
         dynamic? right = Visit(context.expr(1));
 
-        if (context.EQ() is not null)
-            return left == right;
-        else if (context.NEQ() is not null)
-            return left != right;
-        else if (context.GE() is not null)
-            return left >= right;
-        else if (context.LE() is not null)
-            return left <= right;
-        else if (context.GT() is not null)
-            return left > right;
-        else if (context.LT() is not null)
-            return left < right;
-        else
-            throw new ArgumentException("Comparison symbol not defined.");
+        try
+        {
+            if (context.EQ() is not null)
+                return left == right;
+            else if (context.NEQ() is not null)
+                return left != right;
+            else if (context.GE() is not null)
+                return left >= right;
+            else if (context.LE() is not null)
+                return left <= right;
+            else if (context.GT() is not null)
+                return left > right;
+            else if (context.LT() is not null)
+                return left < right;
+            else
+                throw new SharpScriptException("Comparison symbol not defined.", context);
+        }
+        catch (Exception ex)
+        {
+            if (ex is SharpScriptException shEx) throw;
+            throw new SharpScriptException("Can't use comparison operator on types {left.GetType()} and {right.GetType()}",
+                                           context);
+        }
     }
 
     public override object? VisitBoolOperatorExpr(SharpScriptParser.BoolOperatorExprContext context)
@@ -119,8 +149,8 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
         dynamic? left = Visit(context.expr(0));
         dynamic? right = Visit(context.expr(1));
         if (left is not bool || right is not bool)
-            throw new ArgumentException("Using bool operator on non-boolean values: " +
-            "{left}, {right}.");
+            throw new SharpScriptException("Can't use boolean operator on types " +
+                                           "{left.GetType} and {right.GetType()}.", context);
 
         if (context.AND() is not null)
             return left && right;
@@ -129,7 +159,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
         else if (context.XOR() is not null)
             return left ^ right;
         else
-            throw new ArgumentException("Bool operator logic not implemented.");
+            throw new SharpScriptException("Bool operator logic not implemented.", context);
     }
 
     public override object? VisitNotExpr(SharpScriptParser.NotExprContext context)
@@ -138,8 +168,7 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
         if (expression is bool)
             return !expression;
         else
-            throw new ArgumentException($"Applying NOT to a non-boolean expression: " +
-            "expression \"{expression}\" is of type \"{expression.GetType()}\"");
+            throw new SharpScriptException($"Can't apply NOT to a non-boolean expression ({expression}).", context);
     }
 
     public override object? VisitIntExpr(SharpScriptParser.IntExprContext context)
@@ -166,6 +195,8 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     public override object? VisitIdExpr(SharpScriptParser.IdExprContext context)
     {
         string id = context.ID().GetText();
+        if (!_variables.ContainsKey(id))
+            throw new SharpScriptException($"\"{id}\" is not defined.", context);
         return _variables[id];
     }
 
@@ -188,7 +219,9 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
     {
         for (int i = 0; i < context.expr().Length; i++)
         {
-            if (Visit(context.expr(i)) is bool condition && condition)
+            if (Visit(context.expr(i)) is not bool condition)
+                throw new SharpScriptException("If: {i}-th condition is not a boolean expression.", context);
+            if (condition)
             {
                 Visit(context.blockStat(i));
                 return null;
@@ -207,6 +240,9 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
 
     public override object? VisitWhileStat(SharpScriptParser.WhileStatContext context)
     {
+        if (Visit(context.expr()) is not bool)
+            throw new SharpScriptException("While: condition is not boolean expression.", context);
+
         while (Visit(context.expr()) is bool condition && condition)
         {
             Visit(context.blockStat());
@@ -231,7 +267,9 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
 
             if (expectedParameters.Length != providedArgs.Length)
             {
-                throw new Exception($"Function \"{functionName}\" expects {expectedParameters.Length} arguments, but got {providedArgs.Length}.");
+                throw new SharpScriptException(
+                    $"Function \"{functionName}\" expects {expectedParameters.Length} " +
+                    "arguments, but got {providedArgs.Length}.", context);
             }
 
             object?[] coercedArgs = new object?[providedArgs.Length];
@@ -259,7 +297,10 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
                     }
                     catch (InvalidCastException)
                     {
-                        throw new Exception($"Cannot convert argument {i + 1} (\"{providedValue}\") from {providedValue.GetType().Name} to {expectedType.Name} in function \"{functionName}\".");
+                        throw new SharpScriptException(
+                            $"Cannot convert argument {i + 1} (\"{providedValue}\") " +
+                            "from {providedValue.GetType().Name} to {expectedType.Name} " +
+                            "in function \"{functionName}\".", context);
                     }
                 }
             }
@@ -270,7 +311,8 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
             }
             catch (TargetInvocationException ex)
             {
-                throw ex.InnerException ?? ex;
+                throw new SharpScriptException((ex.InnerException is not null) ?
+                                               ex.InnerException.Message : ex.Message, context);
             }
         }
 
@@ -279,6 +321,6 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
             throw new NotImplementedException("User-defined function");
         }
 
-        throw new Exception($"Unknown function: \"{functionName}\"");
+        throw new SharpScriptException($"Unknown function: \"{functionName}\"", context);
     }
 }
