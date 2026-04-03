@@ -13,8 +13,12 @@ public class VariableItem
     public object? ValueRaw { get; set; }
 }
 
-public partial class VariableExplorerVM : Tool
+public partial class VariableExplorerVM : Tool, IRecipient<MessageExecutionFinished>
 {
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
+
     public ObservableCollection<VariableItem> Variables { get; set; } = [];
 
     private VariableItem? _selectedVariable;
@@ -29,27 +33,38 @@ public partial class VariableExplorerVM : Tool
         }
     }
 
+    // --------------------------------------------------------------------------------
+    // constructor
+    // --------------------------------------------------------------------------------
+
     public VariableExplorerVM()
     {
-        WeakReferenceMessenger.Default.Register<MessageExecutionFinished>(this, (r, m) => {
-            this.Title = $"Variable Explorer ({m.ScriptName})";
-            Variables.Clear();
-            foreach (var v in m.Environment.Variables)
-            {
-                string variableName = v.Key;
-                string variableType = v.Value?.GetType().Name ?? "null";
-                string variableValue = v.Value?.ToString() ?? "null";
+        WeakReferenceMessenger.Default.Register(this);
+    }
 
-                // handle when matrix (generic)
-                variableType = variableType.Contains("`")
-                    ? variableType.Substring(0, variableType.IndexOf('`'))
-                    : variableType;
+    // --------------------------------------------------------------------------------
+    // methods
+    // --------------------------------------------------------------------------------
 
-                Variables.Add(new VariableItem { Name = variableName,
-                                                 Type = variableType,
-                                                 ValueDisplay = variableValue,
-                                                 ValueRaw = v.Value });
-            }
-        });
+    public async void Receive(MessageExecutionFinished m)
+    {
+        this.Title = $"Variable Explorer ({m.ScriptName})";
+        Variables.Clear();
+        foreach (var v in m.Environment.Variables)
+        {
+            string variableName = v.Key;
+            string variableType = v.Value?.GetType().Name ?? "null";
+            string variableValue = v.Value?.ToString() ?? "null";
+
+            // handle when matrix (generic)
+            variableType = variableType.Contains("`")
+                ? variableType.Substring(0, variableType.IndexOf('`'))
+                : variableType;
+
+            Variables.Add(new VariableItem { Name = variableName,
+                                             Type = variableType,
+                                             ValueDisplay = variableValue,
+                                             ValueRaw = v.Value });
+        }
     }
 }

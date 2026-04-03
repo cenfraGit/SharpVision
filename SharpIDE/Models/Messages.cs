@@ -7,16 +7,7 @@ namespace SharpIDE.Models.Messages;
 public class MessageRunActiveScript { }
 
 // used to broadcast the script code
-public class MessageExecuteCode
-{
-    public string ScriptName { get; }
-    public string ScriptCode { get; }
-    public MessageExecuteCode(string scriptName, string scriptCode)
-    {
-        this.ScriptName = scriptName;
-        this.ScriptCode = scriptCode;
-    }
-}
+public record MessageExecute(Script Script);
 
 public class MessageExecutionFinished
 {

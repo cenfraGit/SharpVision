@@ -3,6 +3,7 @@
 // Provides an environment for sharp script code execution.
 // --------------------------------------------------------------------------------
 
+using System.IO;
 using System.Reflection;
 using SharpVision;
 using Antlr4.Runtime;
@@ -11,16 +12,22 @@ namespace SharpScript;
 
 public class SharpScriptEnvironment
 {
-    public string Code { get; set; } = string.Empty;
+    // --------------------------------------------------------------------------------
+    // fields and properties
+    // --------------------------------------------------------------------------------
 
-    private SharpScriptVisitor _visitor;
-    public SharpScriptErrorListener ErrorListener { get; } = new();
-
+    // script variable table
     public Dictionary<string, object?> Variables { get; set; } = [];
     // for sharp methods
     public static Dictionary<string, MethodInfo> RegistryNative { get; } = [];
     // for user defined functions
     public Dictionary<string, SharpScriptParser.FunctionDeclarationStatContext> RegistryUser { get; } = [];
+
+    // data related to script
+    public Script Script { get; set; }
+
+    private SharpScriptVisitor _visitor;
+    public SharpScriptErrorListener ErrorListener { get; } = new();
 
     // --------------------------------------------------------------------------------
     // constructors
@@ -39,15 +46,10 @@ public class SharpScriptEnvironment
         }
     }
 
-    public SharpScriptEnvironment()
+    public SharpScriptEnvironment(Script script)
     {
-        this._visitor = new(this.Variables, RegistryNative, this.RegistryUser);
-    }
-
-    public SharpScriptEnvironment(string code)
-    {
-        this.Code = code;
-        this._visitor = new(this.Variables, RegistryNative, this.RegistryUser);
+        this.Script = script;
+        this._visitor = new(this.Script, this.Variables, RegistryNative, this.RegistryUser);
     }
 
     // --------------------------------------------------------------------------------
@@ -58,12 +60,12 @@ public class SharpScriptEnvironment
     {
         this.Variables.Clear();
         this.RegistryUser.Clear();
-        this._visitor = new(this.Variables, RegistryNative, this.RegistryUser);
+        this._visitor = new(this.Script, this.Variables, RegistryNative, this.RegistryUser);
     }
 
     public void Run()
     {
-        var inputStream = CharStreams.fromString(this.Code);
+        var inputStream = CharStreams.fromString(this.Script.Code);
         var lexer = new SharpScriptLexer(inputStream);
         var tokenStream = new CommonTokenStream(lexer);
 
