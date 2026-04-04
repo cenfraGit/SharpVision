@@ -9,6 +9,10 @@ public class SharpScriptException : Exception
     public string? Column { get; set; } = null;
     public string ExMessage { get => this.Message; }
 
+    public SharpScriptException(string message) : base(message)
+    {
+    }
+
     public SharpScriptException(string message, dynamic context) : base(message)
     {
         this.Line = context.Start.Line.ToString();
