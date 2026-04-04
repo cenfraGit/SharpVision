@@ -93,7 +93,8 @@
             </MenuItem>
         </Menu>
 
-        <Border DockPanel.Dock="Top" Padding="8">
+        <Border DockPanel.Dock="Top" Padding="4" Margin="5"
+                BorderBrush="#333333" BorderThickness="0.7" CornerRadius="2">
 
             <DockPanel  LastChildFill="False">
 
@@ -113,42 +114,67 @@
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" ToolTip.Tip="Copy">
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Copy" Command="{Binding CopyCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource copy_regular}"
                                   Width="16" Height="16" />
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" ToolTip.Tip="Cut">
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Cut" Command="{Binding CutCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource cut_regular}"
                                   Width="16" Height="16" />
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" ToolTip.Tip="Paste" Margin="0,0,13,0">
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Paste" Command="{Binding PasteCommand}"
+                        Margin="0,0,13,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource clipboard_paste_regular}"
                                   Width="16" Height="16" />
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" ToolTip.Tip="Remove line comment">
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Undo"
+                        Command="{Binding UndoCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PathIcon Data="{StaticResource arrow_undo_regular}"
+                                  Foreground="DarkSlateGray" Width="16" Height="16" />
+                    </StackPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Redo"
+                        Command="{Binding RedoCommand}" Margin="0,0,13,0">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <PathIcon Data="{StaticResource arrow_undo_regular}"
+                                  Foreground="DarkSlateGray" Width="16" Height="16">
+                            <!-- redo symbol outputs same as undo. gh issue unanswered, -->
+                            <!-- so just flip? -->
+                            <PathIcon.RenderTransform>
+                                <ScaleTransform ScaleX="-1" />
+                            </PathIcon.RenderTransform>
+                        </PathIcon>
+                    </StackPanel>
+                </Button>
+
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Remove line comment"
+                        Command="{Binding RemoveLineCommentCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource text_bullet_list_add_regular}"
                                   Foreground="DarkRed" Width="16" Height="16" />
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" ToolTip.Tip="Add line comment" Margin="0,0,13,0">
+                <Button DockPanel.Dock="Left" ToolTip.Tip="Add line comment"
+                        Command="{Binding AddLineCommentCommand}" Margin="0,0,13,0">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource text_bullet_list_add_regular}"
                                   Foreground="Green" Width="16" Height="16" />
                     </StackPanel>
                 </Button>
 
-                <Button DockPanel.Dock="Left" Command="{Binding ButtonRunCommand}">
+                <Button DockPanel.Dock="Right" Command="{Binding ButtonRunCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <PathIcon Data="{StaticResource play_regular}"
                                   Width="16" Height="16" Foreground="Green" />
