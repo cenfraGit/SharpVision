@@ -49,6 +49,9 @@ public class SharpScriptEnvironment
     public SharpScriptEnvironment(Script script)
     {
         this.Script = script;
+        // this could help user not type whole image paths?
+        if (this.Script.Directory is not null && Directory.Exists(this.Script.Directory))
+            Directory.SetCurrentDirectory(this.Script.Directory);
         this._visitor = new(this.Script, this.Variables, RegistryNative, this.RegistryUser);
     }
 

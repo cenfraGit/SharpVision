@@ -49,22 +49,14 @@ public class SharpScriptVisitor : SharpScriptBaseVisitor<object?>
 
     public override object? VisitImportStat(SharpScriptParser.ImportStatContext context)
     {
-        string pathImport = context.STRING().GetText().Trim('"');
+        string pathFile = context.STRING().GetText().Trim('"');
 
-        // user may input absolute path or relative?
-        // first check if path exists (absolute)
-        string pathFile;
-        if (File.Exists(pathImport))
-        {
-            pathFile = pathImport;
-        }
-        else
-        {
-            // try to use our local parent directory, and relative?
-            pathFile = Path.Join(this._script.Directory, pathImport);
-            if (!File.Exists(pathFile))
-                throw new SharpScriptException($"File not found: {pathFile}", context);
-        }
+        // works for both absolute and relative paths
+        if (!File.Exists(pathFile))
+            throw new SharpScriptException($"Import: file not found ({pathFile})", context);
+
+        if (Path.GetExtension(pathFile) != ".svs")
+            throw new SharpScriptException($"Import: file not a .svs file ({pathFile})", context);
 
         if (_loadedFiles.Add(pathFile))
         {
