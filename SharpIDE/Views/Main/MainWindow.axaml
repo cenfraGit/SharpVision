@@ -191,7 +191,7 @@
             <TextBlock DockPanel.Dock="Left"
                        Text="SharpIDE v0.1"
                        VerticalAlignment="Center"
-                       Margin="3" />
+                       Margin="8,3" />
 
             <Button Name="ErrorButton"
                     DockPanel.Dock="Right"
