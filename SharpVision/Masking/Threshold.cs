@@ -15,9 +15,9 @@ public static partial class Sharp
     }
 
     [SharpFunction("Masking", "Applies a threshold to an image.")]
-    private static object[] Threshold(Matrix<byte> src, byte threshold)
+    private static object[] Threshold2(Matrix<byte> src, byte threshold)
     {
-        Matrix<byte> dst = new(src.Rows, src.Columns, src.Channels);
+        Matrix<byte> dst = new();
         Threshold(src, dst, threshold);
         return new object[] { dst };
     }

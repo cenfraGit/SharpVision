@@ -15,4 +15,12 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Point", "Applies a power law transformation.")]
+    private static object[] PowerLaw2(Matrix<byte> src, double c, double gamma)
+    {
+        Matrix<byte> dst = new();
+        PowerLaw(src, dst, c, gamma);
+        return new object[] { dst };
+    }
 }

@@ -36,4 +36,23 @@ public static partial class Sharp
                 break;
         }
     }
+
+    [SharpFunction("Color", "Converts color spaces.")]
+    private static object[] ConvertColor2(Matrix<byte> src, string conversionMode)
+    {
+        Matrix<byte> dst = new();
+        ColorConversion mode;
+        if (conversionMode == "RGB2GRAY")
+            mode = ColorConversion.RGB2GRAY;
+        else if (conversionMode == "GRAY2RGB")
+            mode = ColorConversion.GRAY2RGB;
+        else if (conversionMode == "RGB2HSI")
+            mode = ColorConversion.RGB2HSI;
+        else if (conversionMode == "HSI2RGB")
+            mode = ColorConversion.HSI2RGB;
+        else
+            throw new ArgumentException($"Invalid conversionMode value: {conversionMode}");
+        ConvertColor(src, dst, mode);
+        return new object[] { dst };
+    }
 }

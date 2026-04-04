@@ -12,7 +12,7 @@ namespace SharpVision;
 
 public enum ReadMode
 {
-    Default,
+    Default = 0,
     Grayscale,
     Color
 }
@@ -51,9 +51,19 @@ public static partial class Sharp
     }
 
     [SharpFunction("Read/Write", "Reads an image from a path.")]
-    private static object[] ReadImage(string src)
+    private static object[] ReadImage2(string src, string readMode)
     {
-        Matrix<byte> dst = ReadImage(src, ReadMode.Default);
+        ReadMode mode;
+        if (readMode == "default")
+            mode = ReadMode.Default;
+        else if (readMode == "grayscale")
+            mode = ReadMode.Grayscale;
+        else if (readMode == "color")
+            mode = ReadMode.Color;
+        else
+            throw new ArgumentException($"Invalid readMode value: {readMode}.");
+
+        Matrix<byte> dst = ReadImage(src, mode);
         return new object[] { dst };
     }
 }

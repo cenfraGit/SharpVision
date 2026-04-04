@@ -24,4 +24,12 @@ public static partial class Sharp
                 }
             }
     }
+
+    [SharpFunction("Masking", "Applies a mask to a matrix.")]
+    private static object[] ApplyMask2(Matrix<byte> src, Matrix<byte> mask)
+    {
+        Matrix<byte> dst = new();
+        ApplyMask(src, dst, mask);
+        return new object[] { dst };
+    }
 }

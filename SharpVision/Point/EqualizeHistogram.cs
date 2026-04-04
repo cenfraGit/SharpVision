@@ -26,4 +26,12 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Point", "Equalizes the image histogram using CDF.")]
+    private static object[] EqualizeHistogram2(Matrix<byte> src)
+    {
+        Matrix<byte> dst = new();
+        EqualizeHistogram(src, dst);
+        return new object[] { dst };
+    }
 }

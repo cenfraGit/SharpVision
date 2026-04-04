@@ -35,4 +35,33 @@ public static partial class Sharp
         for (int i = 0; i < totalPixels; i++)
             dst.Data[(i * step) + channel] = src.Data[i];
     }
+
+    [SharpFunction("Channel", "Extracts a channel from an image.")]
+    private static object[] ExtractChannel2(Matrix<byte> src, int channel)
+    {
+        Matrix<byte> dst = new(src.Rows, src.Columns, 1);
+        ExtractChannel(src, dst, channel);
+        return new object[] { dst };
+    }
+
+    [SharpFunction("Channel", "Inserts a channel from an image.")]
+    private static object[] InsertChannel2(Matrix<byte> src, Matrix<byte> dst, int channel)
+    {
+        InsertChannel(src, dst, channel);
+        return new object[] { };
+    }
+
+    [SharpFunction("Matrix", "Creates a matrix.")]
+    private static object[] CreateMatrix(int rows, int columns, int channels)
+    {
+        Matrix<byte> dst = new(rows, columns, channels);
+        return new object[] { dst };
+    }
+
+    // [SharpFunction("Matrix", "Creates a matrix.")]
+    // private static object[] CreateMatrix()
+    // {
+    //     Matrix<byte> dst = new();
+    //     return new object[] { dst };
+    // }
 }

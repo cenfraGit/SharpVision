@@ -75,6 +75,11 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
             this.ErrorService.AddError(sharpException);
             isError = true;
         }
+        catch (Exception ex)
+        {
+            this.ErrorService.AddError(new SharpScriptException(ex.Message));
+            isError = true;
+        }
         finally
         {
             foreach(var error in environment.ErrorListener.Errors)
@@ -123,7 +128,7 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
             {
                 var functionMenuItem = new MenuItemViewModel
                 {
-                    Header = func.Method.Name
+                    Header = func.Method.Name.Replace("2", "")
                 };
 
                 groupMenuItem.Items.Add(functionMenuItem);

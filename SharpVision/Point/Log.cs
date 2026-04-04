@@ -15,4 +15,12 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Point", "Applies a log transformation.")]
+    private static object[] Log2(Matrix<byte> src, double c)
+    {
+        Matrix<byte> dst = new();
+        Log(src, dst, c);
+        return new object[] { dst };
+    }
 }
