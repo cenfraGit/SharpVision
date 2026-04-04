@@ -128,7 +128,7 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
             {
                 var functionMenuItem = new MenuItemViewModel
                 {
-                    Header = func.Method.Name
+                    Header = func.Method.Name.Replace("2", "")
                 };
 
                 groupMenuItem.Items.Add(functionMenuItem);

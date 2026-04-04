@@ -42,7 +42,7 @@ public class SharpScriptEnvironment
         {
             var attribute = method.GetCustomAttribute<SharpFunctionAttribute>();
             if (attribute is null) continue;
-            RegistryNative.Add(method.Name, method);
+            RegistryNative.Add(method.Name.Replace("2", ""), method);
         }
     }
 
