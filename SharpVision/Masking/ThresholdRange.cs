@@ -4,8 +4,8 @@ public static partial class Sharp
 {
     public static void ThresholdRange(Matrix<byte> src,
                                       Matrix<byte> dst,
-                                      ReadOnlySpan<byte> lower,
-                                      ReadOnlySpan<byte> upper)
+                                      byte[] lower,
+                                      byte[] upper)
     {
         if (lower.Length != src.Channels || upper.Length != src.Channels)
         {

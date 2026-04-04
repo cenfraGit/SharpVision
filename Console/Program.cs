@@ -15,8 +15,8 @@ public class Program
         Sharp.ConvertColor(image, imageHSI, ColorConversion.RGB2HSI);
         Sharp.SaveImage(imageHSI, Path.Combine(AppContext.BaseDirectory, "Output/night_hsi.png"));
 
-        ReadOnlySpan<byte> lower = stackalloc byte[] { 0, 200, 60 };
-        ReadOnlySpan<byte> upper = stackalloc byte[] { 60, 255, 255 };
+        byte[] lower = [0, 200, 60];
+        byte[] upper = [60, 255, 255];
 
         Matrix<byte> mask = new();
         Sharp.ThresholdRange(imageHSI, mask, lower, upper);
