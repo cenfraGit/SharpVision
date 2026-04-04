@@ -15,4 +15,12 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Arithmetic", "Performs bitwise not.")]
+    private static object[] BitwiseNot2(Matrix<byte> src)
+    {
+        Matrix<byte> dst = new();
+        BitwiseNot(src, dst);
+        return new object[] { dst };
+    }
 }

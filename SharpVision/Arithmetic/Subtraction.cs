@@ -20,4 +20,12 @@ public static partial class Sharp
                 }
             }
     }
+
+    [SharpFunction("Arithmetic", "Subtracts two matrices.")]
+    private static object[] Subtraction2(Matrix<byte> src1, Matrix<byte> src2)
+    {
+        Matrix<byte> dst = new();
+        Subtraction(src1, src2, dst);
+        return new object[] { dst };
+    }
 }

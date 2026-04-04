@@ -12,4 +12,12 @@ public static partial class Sharp
         for (int i = 0; i < src1.Length; i++)
             dst.Data[i] = (byte)(src1.Data[i] ^ src2.Data[i]);
     }
+
+    [SharpFunction("Arithmetic", "Performs bitwise xor.")]
+    private static object[] BitwiseXor2(Matrix<byte> src1, Matrix<byte> src2)
+    {
+        Matrix<byte> dst = new();
+        BitwiseXor(src1, src2, dst);
+        return new object[] { dst };
+    }
 }

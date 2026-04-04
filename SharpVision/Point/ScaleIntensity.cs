@@ -15,4 +15,12 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Point", "Modifies brightness and contrast.")]
+    private static object[] ScaleIntensity2(Matrix<byte> src, double alpha, double beta)
+    {
+        Matrix<byte> dst = new();
+        ScaleIntensity(src, dst, alpha, beta);
+        return new object[] { dst };
+    }
 }

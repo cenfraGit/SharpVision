@@ -55,4 +55,16 @@ public static partial class Sharp
 
         Utils.ApplyLUT(src, dst, lut);
     }
+
+    [SharpFunction("Point", "Scales values to lower and upper boundaries.")]
+    private static object[] Normalize2(Matrix<byte> src,
+                                       byte lowerNew,
+                                       byte upperNew,
+                                       double lowerPercentile,
+                                       double upperPercentile)
+    {
+        Matrix<byte> dst = new();
+        Normalize(src, dst, lowerNew, upperNew, lowerPercentile, upperPercentile);
+        return new object[] { dst };
+    }
 }
