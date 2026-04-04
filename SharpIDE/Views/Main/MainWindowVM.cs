@@ -220,6 +220,27 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
             }
         }
     }
+
+    [RelayCommand]
+    private void OnCopy() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.Copy));
+
+    [RelayCommand]
+    private void OnCut() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.Cut));
+
+    [RelayCommand]
+    private void OnPaste() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.Paste));
+
+    [RelayCommand]
+    private void OnUndo() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.Undo));
+
+    [RelayCommand]
+    private void OnRedo() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.Redo));
+
+    [RelayCommand]
+    private void OnAddLineComment() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.AddLineComment));
+
+    [RelayCommand]
+    private void OnRemoveLineComment() => WeakReferenceMessenger.Default.Send(new MessageEditorAction(EditorAction.RemoveLineComment));
 }
 
 public class MenuItemViewModel
