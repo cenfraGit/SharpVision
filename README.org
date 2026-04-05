@@ -1,0 +1,131 @@
+* SharpVision: Computer Vision Sandbox Built With C#
+
+The SharpVision project consists of 3 sub-projects:
+- SharpVision: A C# classlib containing CV algorithms
+- SharpScript: an interpreted, dynamically-typed DSL used for quickly developing algorithms using SharpVision functions
+- SharpIDE: a cross-platform GUI environment where you can develop using SharpScript
+
+[[file:Images/image7.png]]
+
+** SharpVision
+
+The SharpVision library acts as the core engine of the project. It can be embedded as a standalone library for use in C#:
+
+#+BEGIN_SRC csharp
+  using SharpVision;
+
+  Matrix<byte> image = Sharp.ReadImage("Images/night.png", ReadMode.Color);
+
+  Matrix<byte> imageHSI = new();
+  Sharp.ConvertColor(image, imageHSI, ColorConversion.RGB2HSI);
+
+  object[] lower = [0, 200, 60];
+  object[] upper = [60, 255, 255];
+
+  Matrix<byte> mask = new();
+  Sharp.ThresholdRange(imageHSI, mask, lower, upper);
+
+  Matrix<byte> output = new();
+  Sharp.ApplyMask(image, output, mask);
+
+  Sharp.SaveImage(output, Path.Combine(AppContext.BaseDirectory, "Output/night_mask.png"));
+#+END_SRC
+
+SharpVision currently includes around 20 operations involving matrix manipulation, color space transformation, masking operations and point operations.
+
+The methods implemented in the library prioritize clarity over micro-optimizations. My intention for this project is to serve as a learning sandbox where users can experiment with the foundational algorithms of computer vision.
+
+** SharpScript
+
+SharpScript serves as a language for interfacing with the SharpVision algorithms in an easier and faster way. It's dynamically typed, which helps reduce a lot of boilerplate code:
+
+#+BEGIN_SRC python
+import "second.svs";
+
+image = ReadImage("night.png", "color");
+
+red = ExtractChannel(image, 0);
+mask = Threshold(red, 150);
+newImage = ApplyMask(image, mask);
+
+newImageContrast = ScaleIntensity(newImage, ALPHA, BETA);
+#+END_SRC
+
+The function calls map directly to the SharpVision algorithm implementations.
+
+SharpScript currently supports:
+- declaring variables
+- importing other scripts (absolute or relative paths)
+- if/else if/else statements
+- while statamentes
+- matrix, int, float (single), string, true/false types
+- comparison operators
+- boolean operators (and, or, xor, not)
+
+Each SharpScript environment holds its own variable table and a special registry where "pointers" to the C# implementations live, using reflection to find them at startup.
+
+SharpScript is powered by C# and uses ANTLR4 for its parser.
+
+** SharpIDE
+
+The SharpIDE provides a graphical interface where users can open/write SharpScript scripts and run them:
+
+[[file:Images/image1.png]]
+
+The project is being built with Avalonia and leverages existing tools like AvaloniaEdit and TextMate grammars to integrate SharpScript into the GUI environment.
+
+*** Variable Explorer
+
+The variable explorer allows you to see the values of the variables at the end of the script execution:
+
+[[file:Images/image3.png]]
+
+*** Image Preview
+
+The image preview displays the currently selected image (~Matrix<byte>~) from the Variable Explorer:
+
+[[file:Images/image2.png]]
+
+*** Text Editor
+
+The text editor is the area where you can input your scripts:
+
+[[file:Images/image4.png]]
+
+The toolbar includes helpful shortcuts for the text editor:
+
+[[file:Images/image8.png]]
+
+*** Error notifications
+
+Errors may occur when trying to execute a script (like invalid number of parameters in a function call, identifiers not found, syntax errors, etc.). The error output section at the bottom will display this information (if any):
+
+[[file:Images/image5.png]]
+
+[[file:Images/image6.png]]
+
+* How to run
+
+(Windows 10/11 and Debian 12 (xfce))
+
+** Using dotnet CLI
+
+1. Clone this repository
+2. 
+#+BEGIN_SRC python
+  cd SharpIDE/
+  dotnet run -c Release
+#+END_SRC
+
+** Using VisualStudio
+
+1. Clone this repository
+2. Open SharpVision.slnx in VisualStudio
+3. Set the SharpIDE project as startup project and run
+
+Note: to just use the sharpvision classlib, simply reference it directly from any project you want to use it from
+
+* References
+
+- The SharpVision algorithm implementations are based off the book /Digital Image Processing, Fourth Edition (2018)/ by Rafael C. Gonzalez and Richard E. Woods.
+- The SharpVision library uses SixLabors.ImageSharp for image input/output operations.
