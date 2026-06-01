@@ -2,12 +2,13 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
+    [SharpFunction("Point", "Scales values to lower and upper boundaries.")]
     public static void Normalize(Matrix<byte> src,
-                                 Matrix<byte> dst,
-                                 byte lowerNew = 0,
-                                 byte upperNew = 255,
-                                 double lowerPercentile = 0.0,
-                                 double upperPercentile = 1.0)
+                                         [SharpOutput] Matrix<byte> dst,
+                                         byte lowerNew = 0,
+                                         byte upperNew = 255,
+                                         double lowerPercentile = 0.0,
+                                         double upperPercentile = 1.0)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -54,17 +55,5 @@ public static partial class Sharp
         }
 
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Point", "Scales values to lower and upper boundaries.")]
-    private static object[] Normalize2(Matrix<byte> src,
-                                       byte lowerNew,
-                                       byte upperNew,
-                                       double lowerPercentile,
-                                       double upperPercentile)
-    {
-        Matrix<byte> dst = new();
-        Normalize(src, dst, lowerNew, upperNew, lowerPercentile, upperPercentile);
-        return new object[] { dst };
     }
 }

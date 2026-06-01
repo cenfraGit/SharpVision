@@ -9,7 +9,7 @@ using TextMateSharp.Themes;
 
 namespace SharpIDE.Views.Editor;
 
-public class SharpScriptRegistryOptions : IRegistryOptions
+public class FishboneRegistryOptions : IRegistryOptions
 {
     private readonly string _grammarResource = "SharpIDE.Assets.sharpscript.tmLanguage.json";
 

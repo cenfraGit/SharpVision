@@ -8,6 +8,7 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
+    [SharpFunction("Read/Write", "Saves an image to a path.")]
     public static void SaveImage(Matrix<byte> src, string dst)
     {
         if (src.Channels == 1)
@@ -24,12 +25,5 @@ public static partial class Sharp
         {
             throw new NotSupportedException($"Saving images with {src.Channels} channels is not supported.");
         }
-    }
-
-    [SharpFunction("Read/Write", "Saves an image to a path.")]
-    private static object[] SaveImage2(Matrix<byte> src, string dst)
-    {
-        SaveImage(src, dst);
-        return new object[] { };
     }
 }

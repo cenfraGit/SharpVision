@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void Threshold(Matrix<byte> src, Matrix<byte> dst, byte threshold)
+    [SharpFunction("Masking", "Applies a threshold to an image.")]
+    public static void Threshold(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, byte threshold)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -12,13 +13,5 @@ public static partial class Sharp
             lut[i] = (i >= threshold) ? (byte)255 : (byte)0;
         }
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Masking", "Applies a threshold to an image.")]
-    private static object[] Threshold2(Matrix<byte> src, byte threshold)
-    {
-        Matrix<byte> dst = new();
-        Threshold(src, dst, threshold);
-        return new object[] { dst };
     }
 }

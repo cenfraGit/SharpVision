@@ -1,4 +1,5 @@
 using Dock.Model.Mvvm.Controls;
+using System;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Messaging;
 using SharpIDE.Models.Messages;
@@ -50,8 +51,11 @@ public partial class VariableExplorerVM : Tool, IRecipient<MessageExecutionFinis
     {
         this.Title = $"Variable Explorer ({m.ScriptName})";
         Variables.Clear();
-        foreach (var v in m.Environment.Variables)
+        foreach (var v in m.Environment.Values)
         {
+            if (v.Value is Delegate)
+                continue;
+
             string variableName = v.Key;
             string variableType = v.Value?.GetType().Name ?? "null";
             string variableValue = v.Value?.ToString() ?? "null";

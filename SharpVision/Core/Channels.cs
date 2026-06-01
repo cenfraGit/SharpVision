@@ -2,12 +2,9 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void ExtractChannel<T>(Matrix<T> src, Matrix<T> dst, int channel) where T : unmanaged
+    [SharpFunction("Channel", "Extracts a channel from an image.")]
+    public static void ExtractChannel(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, int channel)
     {
-        if (dst.Channels != 1)
-            throw new ArgumentException("Destination matrix must be 1-channel.");
-        if (src.Rows != dst.Rows || src.Columns != dst.Columns)
-            throw new ArgumentException("Matrix dimensions must match.");
         if (channel < 0 || channel >= src.Channels)
             throw new ArgumentOutOfRangeException(nameof(channel), "Invalid channel.");
 
@@ -20,7 +17,8 @@ public static partial class Sharp
             dst.Data[i] = src.Data[(i * step) + channel];
     }
 
-    public static void InsertChannel<T>(Matrix<T> src, Matrix<T> dst, int channel) where T : unmanaged
+    [SharpFunction("Channel", "Inserts a channel from an image.")]
+    public static void InsertChannel(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, int channel)
     {
         if (src.Channels != 1)
             throw new ArgumentException("Source matrix must be 1-channel.");
@@ -36,32 +34,9 @@ public static partial class Sharp
             dst.Data[(i * step) + channel] = src.Data[i];
     }
 
-    [SharpFunction("Channel", "Extracts a channel from an image.")]
-    private static object[] ExtractChannel2(Matrix<byte> src, int channel)
-    {
-        Matrix<byte> dst = new(src.Rows, src.Columns, 1);
-        ExtractChannel(src, dst, channel);
-        return new object[] { dst };
-    }
-
-    [SharpFunction("Channel", "Inserts a channel from an image.")]
-    private static object[] InsertChannel2(Matrix<byte> src, Matrix<byte> dst, int channel)
-    {
-        InsertChannel(src, dst, channel);
-        return new object[] { };
-    }
-
     [SharpFunction("Matrix", "Creates a matrix.")]
-    private static object[] CreateMatrix(int rows, int columns, int channels)
+    public static Matrix<byte> CreateMatrix()
     {
-        Matrix<byte> dst = new(rows, columns, channels);
-        return new object[] { dst };
+        return new Matrix<byte>();
     }
-
-    // [SharpFunction("Matrix", "Creates a matrix.")]
-    // private static object[] CreateMatrix()
-    // {
-    //     Matrix<byte> dst = new();
-    //     return new object[] { dst };
-    // }
 }

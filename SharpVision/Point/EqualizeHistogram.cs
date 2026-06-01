@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void EqualizeHistogram(Matrix<byte> src, Matrix<byte> dst)
+    [SharpFunction("Point", "Equalizes the image histogram using CDF.")]
+    public static void EqualizeHistogram(Matrix<byte> src, [SharpOutput] Matrix<byte> dst)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -25,13 +26,5 @@ public static partial class Sharp
         }
 
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Point", "Equalizes the image histogram using CDF.")]
-    private static object[] EqualizeHistogram2(Matrix<byte> src)
-    {
-        Matrix<byte> dst = new();
-        EqualizeHistogram(src, dst);
-        return new object[] { dst };
     }
 }

@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void Log(Matrix<byte> src, Matrix<byte> dst, double c)
+    [SharpFunction("Point", "Applies a log transformation.")]
+    public static void Log(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, double c)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -14,13 +15,5 @@ public static partial class Sharp
         }
 
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Point", "Applies a log transformation.")]
-    private static object[] Log2(Matrix<byte> src, double c)
-    {
-        Matrix<byte> dst = new();
-        Log(src, dst, c);
-        return new object[] { dst };
     }
 }

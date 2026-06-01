@@ -8,7 +8,8 @@ public class Program
     {
         Directory.CreateDirectory(Path.Combine(AppContext.BaseDirectory, "Output"));
 
-        Matrix<byte> image = Sharp.ReadImage("Images/night.png", ReadMode.Color);
+        Matrix<byte> image = new();
+        Sharp.ReadImage(image, "Images/night.png", ReadMode.Color);
         Sharp.SaveImage(image, Path.Combine(AppContext.BaseDirectory, "Output/night.png"));
 
         Matrix<byte> imageHSI = new();

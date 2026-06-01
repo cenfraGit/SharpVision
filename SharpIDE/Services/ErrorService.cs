@@ -1,26 +1,34 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using SharpScript;
 
 namespace SharpIDE.Services;
 
+public class ScriptExecutionError
+{
+    public string? Line { get; set; }
+    public string? Column { get; set; }
+    public string ExMessage { get; set; }
+
+    public ScriptExecutionError(string message, string? line = null, string? column = null)
+    {
+        this.ExMessage = message;
+        this.Line = line;
+        this.Column = column;
+    }
+}
+
 public interface IErrorService
 {
-    ObservableCollection<SharpScriptException> Errors { get; set; }
+    ObservableCollection<ScriptExecutionError> Errors { get; set; }
 
-    void AddError(SharpScriptException ex);
+    void AddError(ScriptExecutionError ex);
     void ClearErrors();
 }
 
 public class ErrorService : IErrorService
 {
-    public ObservableCollection<SharpScriptException> Errors { get; set; } = [];
+    public ObservableCollection<ScriptExecutionError> Errors { get; set; } = [];
 
-    public void AddError(SharpScriptException ex)
+    public void AddError(ScriptExecutionError ex)
     {
         this.Errors.Add(ex);
     }

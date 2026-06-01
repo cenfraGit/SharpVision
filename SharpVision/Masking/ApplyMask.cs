@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void ApplyMask(Matrix<byte> src, Matrix<byte> dst, Matrix<byte> mask)
+    [SharpFunction("Masking", "Applies a mask to a matrix.")]
+    public static void ApplyMask(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, Matrix<byte> mask)
     {
         if (src.Rows != mask.Rows || src.Columns != mask.Columns)
             throw new ArgumentException("Matrix and mask must have same dimensions.");
@@ -23,13 +24,5 @@ public static partial class Sharp
                     dst.SetPixel(row, col, channel, (byte)(pixelImage & pixelMask));
                 }
             }
-    }
-
-    [SharpFunction("Masking", "Applies a mask to a matrix.")]
-    private static object[] ApplyMask2(Matrix<byte> src, Matrix<byte> mask)
-    {
-        Matrix<byte> dst = new();
-        ApplyMask(src, dst, mask);
-        return new object[] { dst };
     }
 }

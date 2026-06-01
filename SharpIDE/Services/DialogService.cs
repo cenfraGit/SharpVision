@@ -46,7 +46,7 @@ public class DialogService : IDialogService
         });
     }
 
-    private static FilePickerFileType SvsFileType => new("SharpScript Files")
+    private static FilePickerFileType SvsFileType => new("Fishbone Files")
     {
         Patterns = ["*.svs"],
         AppleUniformTypeIdentifiers = ["public.text"],

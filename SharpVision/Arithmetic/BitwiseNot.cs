@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void BitwiseNot(Matrix<byte> src, Matrix<byte> dst)
+    [SharpFunction("Arithmetic", "Performs bitwise not.")]
+    public static void BitwiseNot(Matrix<byte> src, [SharpOutput] Matrix<byte> dst)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -14,13 +15,5 @@ public static partial class Sharp
         }
 
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Arithmetic", "Performs bitwise not.")]
-    private static object[] BitwiseNot2(Matrix<byte> src)
-    {
-        Matrix<byte> dst = new();
-        BitwiseNot(src, dst);
-        return new object[] { dst };
     }
 }

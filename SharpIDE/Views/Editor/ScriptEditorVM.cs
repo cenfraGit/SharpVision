@@ -3,8 +3,8 @@ using AvaloniaEdit.Document;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Mvvm.Controls;
+using SharpIDE.Models;
 using SharpIDE.Models.Messages;
-using SharpScript;
 
 namespace SharpIDE.Views.Editor;
 

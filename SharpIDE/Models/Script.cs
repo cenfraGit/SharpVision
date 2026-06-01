@@ -1,5 +1,6 @@
 using System.IO;
-namespace SharpScript;
+
+namespace SharpIDE.Models;
 
 public class Script
 {

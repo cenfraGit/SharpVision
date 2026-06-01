@@ -1,7 +1,10 @@
 <Solution>
   <Project Path="Console/Console.csproj" />
-  <Project Path="SharpScript.Tests/SharpScript.Tests.csproj" />
-  <Project Path="SharpScript/SharpScript.csproj" />
-  <Project Path="SharpVision/SharpVision.csproj" />
+  <Project Path="Fishbone/Fishbone.Core/Fishbone.Core.csproj" />
+  <Project Path="Fishbone/Fishbone.Engine/Fishbone.Engine.csproj" />
+  <Project Path="Fishbone/Fishbone.Interpreter/Fishbone.Interpreter.csproj" />
+  <Project Path="Fishbone/Fishbone.Parser/Fishbone.Parser.csproj" />
   <Project Path="SharpIDE/SharpIDE.csproj" />
+  <Project Path="SharpVision.Tests/SharpVision.Tests.csproj" />
+  <Project Path="SharpVision/SharpVision.csproj" />
 </Solution>
