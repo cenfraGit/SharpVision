@@ -1,5 +1,5 @@
-using SharpScript;
-using System.Collections.Generic;
+using Fishbone.Core;
+using SharpIDE.Models;
 
 namespace SharpIDE.Models.Messages;
 
@@ -12,9 +12,9 @@ public record MessageExecute(Script Script);
 public class MessageExecutionFinished
 {
     public string ScriptName { get; }
-    public SharpScriptEnvironment Environment { get; }
+    public FishboneEnvironment Environment { get; }
 
-    public MessageExecutionFinished(string scriptName, SharpScriptEnvironment environment)
+    public MessageExecutionFinished(string scriptName, FishboneEnvironment environment)
     {
         this.ScriptName = scriptName;
         this.Environment = environment;

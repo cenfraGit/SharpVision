@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SharpVision\SharpVision.csproj" />
-    <ProjectReference Include="..\SharpScript\SharpScript.csproj" />
+    <ProjectReference Include="..\Fishbone\Fishbone.Engine\Fishbone.Engine.csproj" />
   </ItemGroup>
 
   <ItemGroup>

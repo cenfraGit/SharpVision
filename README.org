@@ -1,9 +1,9 @@
 * SharpVision: Computer Vision Sandbox Built With C#
 
-The SharpVision project consists of 3 sub-projects:
+The SharpVision application stack consists of:
 - SharpVision: A C# classlib containing CV algorithms
-- SharpScript: an interpreted, dynamically-typed DSL used for quickly developing algorithms using SharpVision functions
-- SharpIDE: a cross-platform GUI environment where you can develop using SharpScript
+- Fishbone: an interpreted, dynamically-typed DSL used for quickly developing algorithms using SharpVision functions
+- SharpIDE: a cross-platform GUI environment where you can develop using Fishbone
 
 [[file:Images/image7.png]]
 
@@ -14,13 +14,14 @@ The SharpVision library acts as the core engine of the project. It can be embedd
 #+BEGIN_SRC csharp
   using SharpVision;
 
-  Matrix<byte> image = Sharp.ReadImage("Images/night.png", ReadMode.Color);
+  Matrix<byte> image = new();
+  Sharp.ReadImage(image, "Images/night.png", ReadMode.Color);
 
   Matrix<byte> imageHSI = new();
   Sharp.ConvertColor(image, imageHSI, ColorConversion.RGB2HSI);
 
-  object[] lower = [0, 200, 60];
-  object[] upper = [60, 255, 255];
+  byte[] lower = [0, 200, 60];
+  byte[] upper = [60, 255, 255];
 
   Matrix<byte> mask = new();
   Sharp.ThresholdRange(imageHSI, mask, lower, upper);
@@ -35,44 +36,46 @@ SharpVision currently includes around 20 operations involving matrix manipulatio
 
 The methods implemented in the library prioritize clarity over micro-optimizations. My intention for this project is to serve as a learning sandbox where users can experiment with the foundational algorithms of computer vision.
 
-** SharpScript
+** Fishbone
 
-SharpScript serves as a language for interfacing with the SharpVision algorithms in an easier and faster way. It's dynamically typed, which helps reduce a lot of boilerplate code:
+Fishbone serves as a language for interfacing with the SharpVision algorithms in an easier and faster way. It's dynamically typed, which helps reduce a lot of boilerplate code:
 
-#+BEGIN_SRC python
-import "second.svs";
+#+BEGIN_SRC fishbone
+let image = CreateMatrix();
+let gray = CreateMatrix();
+let mask = CreateMatrix();
+let newImage = CreateMatrix();
+let newImageContrast = CreateMatrix();
 
-image = ReadImage("night.png", "color");
+ReadImage(image, "night.png", "color");
+ConvertColor(image, gray, "rgb2gray");
+Threshold(gray, mask, 150);
+ApplyMask(image, newImage, mask);
+ScaleIntensity(newImage, newImageContrast, 1.25, 10);
 
-red = ExtractChannel(image, 0);
-mask = Threshold(red, 150);
-newImage = ApplyMask(image, mask);
-
-newImageContrast = ScaleIntensity(newImage, ALPHA, BETA);
+SaveImage(newImageContrast, "night_output.png");
 #+END_SRC
 
 The function calls map directly to the SharpVision algorithm implementations.
 
-SharpScript currently supports:
+Fishbone currently supports:
 - declaring variables
-- importing other scripts (absolute or relative paths)
 - if/else if/else statements
-- while statamentes
+- while statements
 - matrix, int, float (single), string, true/false types
 - comparison operators
 - boolean operators (and, or, xor, not)
+- break and continue
 
-Each SharpScript environment holds its own variable table and a special registry where "pointers" to the C# implementations live, using reflection to find them at startup.
-
-SharpScript is powered by C# and uses ANTLR4 for its parser.
+SharpVision exposes its script functions through a Fishbone configuration. Script calls use the same public SharpVision methods that C# callers use, with small adapter behavior for enum parsing, primitive conversion, and nested call unwrapping. Image-producing operations mutate caller-provided destination matrices so scripts can reuse allocations.
 
 ** SharpIDE
 
-The SharpIDE provides a graphical interface where users can open/write SharpScript scripts and run them:
+The SharpIDE provides a graphical interface where users can open/write Fishbone scripts and run them:
 
 [[file:Images/image1.png]]
 
-The project is being built with Avalonia and leverages existing tools like AvaloniaEdit and TextMate grammars to integrate SharpScript into the GUI environment.
+The project is being built with Avalonia and leverages existing tools like AvaloniaEdit and TextMate grammars to integrate Fishbone into the GUI environment.
 
 *** Variable Explorer
 
@@ -111,7 +114,7 @@ Errors may occur when trying to execute a script (like invalid number of paramet
 ** Using dotnet CLI
 
 1. Clone this repository
-2. 
+2.
 #+BEGIN_SRC python
   cd SharpIDE/
   dotnet run -c Release

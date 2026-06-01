@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void PowerLaw(Matrix<byte> src, Matrix<byte> dst, double c, double gamma)
+    [SharpFunction("Point", "Applies a power law transformation.")]
+    public static void PowerLaw(Matrix<byte> src, [SharpOutput] Matrix<byte> dst, double c, double gamma)
     {
         dst.ReallocateIfNeeded(src.Rows, src.Columns, src.Channels);
 
@@ -14,13 +15,5 @@ public static partial class Sharp
         }
 
         Utils.ApplyLUT(src, dst, lut);
-    }
-
-    [SharpFunction("Point", "Applies a power law transformation.")]
-    private static object[] PowerLaw2(Matrix<byte> src, double c, double gamma)
-    {
-        Matrix<byte> dst = new();
-        PowerLaw(src, dst, c, gamma);
-        return new object[] { dst };
     }
 }

@@ -1,22 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Dock.Model.Controls;
 using Dock.Model.Core;
+using Fishbone.Engine;
 using SharpIDE.Models.Layout;
 using SharpIDE.Models.Messages;
-using SharpIDE.Views.Editor;
 using SharpIDE.Services;
-using SharpScript;
+using SharpIDE.Views.Editor;
 using SharpVision;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Enums;
 
 namespace SharpIDE.Views.Main;
 
@@ -63,34 +60,25 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
 
         this.ErrorService.ClearErrors();
 
-        var environment = new SharpScriptEnvironment(m.Script);
-        bool isError = false;
+        string currentDirectory = Directory.GetCurrentDirectory();
 
         try
         {
-            environment.Run();
-        }
-        catch (SharpScriptException sharpException)
-        {
-            this.ErrorService.AddError(sharpException);
-            isError = true;
+            if (m.Script.Directory is not null && Directory.Exists(m.Script.Directory))
+                Directory.SetCurrentDirectory(m.Script.Directory);
+
+            var configuration = SharpFishbone.CreateConfiguration();
+            var environment = FishboneEngine.Run(m.Script.Code, configuration);
+            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.Script.Name, environment));
         }
         catch (Exception ex)
         {
-            this.ErrorService.AddError(new SharpScriptException(ex.Message));
-            isError = true;
+            this.ErrorService.AddError(new ScriptExecutionError(ex.Message));
         }
         finally
         {
-            foreach(var error in environment.ErrorListener.Errors)
-            {
-                this.ErrorService.AddError(error);
-                isError = true; // care if reassign?
-            }
+            Directory.SetCurrentDirectory(currentDirectory);
         }
-
-        if (!isError)
-            WeakReferenceMessenger.Default.Send(new MessageExecutionFinished(m.Script.Name, environment));
     }
 
     private static IDocumentDock? GetScriptsDock(IDockable? root)
@@ -111,24 +99,18 @@ public partial class MainWindowVM : ObservableObject, IRecipient<MessageExecute>
 
     private void LoadFunctionsMenu()
     {
-        var methods = typeof(Sharp).GetMethods(BindingFlags.NonPublic | BindingFlags.Static);
-
-        var discoveredFunctions = methods
-            .Select(m => new { Method = m, Attr = m.GetCustomAttribute<SharpFunctionAttribute>() })
-            .Where(x => x.Attr != null)
-            .ToList();
-
-        var groupedFunctions = discoveredFunctions.GroupBy(x => x.Attr!.Group);
+        var groupedFunctions = SharpFishbone.GetFunctionDescriptors()
+            .GroupBy(descriptor => descriptor.Group);
 
         foreach (var group in groupedFunctions)
         {
             var groupMenuItem = new MenuItemViewModel { Header = group.Key };
 
-            foreach (var func in group)
+            foreach (var descriptor in group)
             {
                 var functionMenuItem = new MenuItemViewModel
                 {
-                    Header = func.Method.Name.Replace("2", "")
+                    Header = descriptor.Signature
                 };
 
                 groupMenuItem.Items.Add(functionMenuItem);

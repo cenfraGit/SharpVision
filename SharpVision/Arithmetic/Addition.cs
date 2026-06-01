@@ -2,7 +2,8 @@ namespace SharpVision;
 
 public static partial class Sharp
 {
-    public static void Addition(Matrix<byte> src1, Matrix<byte> src2, Matrix<byte> dst)
+    [SharpFunction("Arithmetic", "Adds two matrices.")]
+    public static void Addition(Matrix<byte> src1, Matrix<byte> src2, [SharpOutput] Matrix<byte> dst)
     {
         if (src1.Length != src2.Length)
             throw new ArgumentException("Matrices must have the same dimensions and channels.");
@@ -19,13 +20,5 @@ public static partial class Sharp
                     dst.SetPixel(row, col, channel, Utils.ClampToByte(valueA + valueB));
                 }
             }
-    }
-
-    [SharpFunction("Arithmetic", "Adds two matrices.")]
-    private static object[] Addition2(Matrix<byte> src1, Matrix<byte> src2)
-    {
-        Matrix<byte> dst = new();
-        Addition(src1, src2, dst);
-        return new object[] { dst };
     }
 }

@@ -39,7 +39,7 @@ public partial class ScriptEditorView : UserControl
         var editor = this.FindControl<TextEditor>("Editor");
         if (editor != null && _textMateInstallation == null)
         {
-            var registryOptions = new SharpScriptRegistryOptions();
+            var registryOptions = new FishboneRegistryOptions();
             _textMateInstallation = editor.InstallTextMate(registryOptions);
             _textMateInstallation.SetGrammar("source.svs");
 

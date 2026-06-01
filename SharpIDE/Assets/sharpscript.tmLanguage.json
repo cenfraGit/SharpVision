@@ -1,5 +1,5 @@
 {
-  "name": "SharpScript",
+  "name": "Fishbone",
   "scopeName": "source.svs",
   "patterns": [
     {
@@ -11,7 +11,7 @@
       "name": "comment.line.double-slash.svs",
       "match": "//.*$"
     },
-    { "name": "keyword.control.svs", "match": "\\b(if|else|while|foreach|in|func|return|import|and|or|xor|not)\\b" },
+    { "name": "keyword.control.svs", "match": "\\b(let|if|else|while|foreach|in|func|return|break|continue|import|and|or|xor|not)\\b" },
     { "name": "constant.language.svs", "match": "\\b(true|false)\\b" },
     { "name": "string.quoted.double.svs", "begin": "\"", "end": "\"" },
     { "name": "constant.numeric.svs", "match": "\\b\\d+(\\.\\d+)?\\b" },
